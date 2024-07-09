@@ -1,2 +1,3 @@
 DOMAIN,v4.plex.tv
 DOMAIN,dler.cloud
+AND,((DEST-PORT,22), (GEOIP, CN))
