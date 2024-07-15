@@ -1,3 +1,4 @@
 DOMAIN,v4.plex.tv
 DOMAIN,dler.cloud
+DOMAIN-SUFFIX,quickconnect.to
 AND,((DEST-PORT,22), (GEOIP, CN))
