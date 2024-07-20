@@ -3,4 +3,5 @@ DOMAIN,dler.cloud
 DOMAIN-SUFFIX,quickconnect.to
 DOMAIN-SUFFIX,conver.cc
 DOMAIN-SUFFIX,ilce.alicdn.com
+DOMAIN-SUFFIX,wxs.qq.com
 AND,((DEST-PORT,22), (GEOIP, CN))
