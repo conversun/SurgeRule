@@ -6,4 +6,5 @@ DOMAIN-SUFFIX,ilce.alicdn.com
 DOMAIN-SUFFIX,wxs.qq.com
 DOMAIN-SUFFIX,atianqi.com
 DOMAIN-SUFFIX,pingpongx.com
+DOMAIN-SUFFIX,spdb.com.cn
 AND,((DEST-PORT,22), (GEOIP, CN))
