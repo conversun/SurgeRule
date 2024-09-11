@@ -5,4 +5,5 @@ DOMAIN-SUFFIX,conver.cc
 DOMAIN-SUFFIX,ilce.alicdn.com
 DOMAIN-SUFFIX,wxs.qq.com
 DOMAIN-SUFFIX,atianqi.com
+DOMAIN-SUFFIX,pingpongx.com
 AND,((DEST-PORT,22), (GEOIP, CN))
