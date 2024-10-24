@@ -9,4 +9,5 @@ DOMAIN-SUFFIX,atianqi.com
 DOMAIN-SUFFIX,pingpongx.com
 DOMAIN-SUFFIX,spdb.com.cn
 DOMAIN-SUFFIX,diandian.com
+DOMAIN-SUFFIX,apifox.com
 AND,((DEST-PORT,22), (GEOIP, CN))
