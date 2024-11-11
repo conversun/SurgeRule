@@ -1,13 +1,6 @@
-DOMAIN,parallels.com
-DOMAIN,static.parallels.com
-DOMAIN,download.parallels.com.cdn.cloudflare.net
-DOMAIN,download.parallels.com
-DOMAIN,update.parallels.com.cdn.cloudflare.net
-DOMAIN,update.parallels.com
-DOMAIN,reportus.parallels.com.cdn.cloudflare.net
-DOMAIN,reportus.parallels.com
-DOMAIN,desktop.parallels.com.cdn.cloudflare.net
-DOMAIN,desktop.parallels.com
+DOMAIN-SUFFIX,parallels.com
+DOMAIN-SUFFIX,myparallels.com
+DOMAIN-SUFFIX,parallels.com.cdn.cloudflare.net
 DOMAIN,parallels.cn
 DOMAIN,parallels.com
 DOMAIN,parallels.de
@@ -18,6 +11,3 @@ DOMAIN,parallels.pt
 DOMAIN,parallels.ru
 DOMAIN,parallelskorea.com
 DOMAIN,parallels.cn
-DOMAIN,pax-manager.myparallels.com
-DOMAIN,myparallels.com
-DOMAIN,my.parallels.com
