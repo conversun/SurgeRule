@@ -10,4 +10,5 @@ DOMAIN-SUFFIX,pingpongx.com
 DOMAIN-SUFFIX,spdb.com.cn
 DOMAIN-SUFFIX,diandian.com
 DOMAIN-SUFFIX,apifox.com
+PROCESS-NAME,微信
 AND,((DEST-PORT,22), (GEOIP, CN))
