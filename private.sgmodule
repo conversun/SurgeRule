@@ -1,10 +1,5 @@
 #!name=Private Mitm
 #!desc=Add Mitm
 
-[URL Rewrite]
-^https://ruleset\.skk\.moe/List ssk://
-^https://raw\.githubusercontent\.com/conversun/SurgeRule/main/ conversun://
-^https://cdn\.jsdelivr\.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/ black://
-
 [MITM]
 hostname = %APPEND% *.local, *.socloud.ltd, *.zcode.ltd, *.imagedelivery.net, appevent.cc, *.artbest.pro, *.xet.tech, *.nevercode.net, *.webscraping.ai, *.instagram.com
