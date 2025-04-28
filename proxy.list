@@ -4,3 +4,5 @@ DOMAIN-SUFFIX,admob.google.com
 DOMAIN-SUFFIX,admob.com
 DOMAIN-SUFFIX,ruby-lang.org
 DOMAIN-SUFFIX,posthog.com
+
+DOMAIN,api-adservices.apple.com
