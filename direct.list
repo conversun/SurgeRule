@@ -12,6 +12,7 @@ DOMAIN-SUFFIX,spdb.com.cn
 DOMAIN-SUFFIX,diandian.com
 DOMAIN-SUFFIX,apifox.com
 DOMAIN-SUFFIX,todesk.com
+DOMAIN-SUFFIX,pcbeta.com
 
 PROCESS-NAME,WeChat
 PROCESS-NAME,Feishu
