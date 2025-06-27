@@ -2,6 +2,7 @@ DOMAIN,app.plex.tv
 DOMAIN-SUFFIX,appsflyer.com
 DOMAIN-SUFFIX,admob.google.com
 DOMAIN-SUFFIX,admob.com
+DOMAIN-SUFFIX,doubleclick.net
 DOMAIN-SUFFIX,adwords.google.com
 DOMAIN-SUFFIX,googleadservices.com
 DOMAIN-SUFFIX,google-analytics.com
