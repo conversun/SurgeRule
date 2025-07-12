@@ -13,7 +13,8 @@ DOMAIN-SUFFIX,diandian.com
 DOMAIN-SUFFIX,apifox.com
 DOMAIN-SUFFIX,todesk.com
 DOMAIN-SUFFIX,pcbeta.com
-DOMAIN,mb.bochk.com
+DOMAIN-SUFFIX,juejin.cn
+DOMAIN-SUFFIX,bochk.com
 
 PROCESS-NAME,WeChat
 PROCESS-NAME,Feishu
