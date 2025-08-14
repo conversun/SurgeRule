@@ -1,0 +1,35 @@
+#!name=Hide qBittorrent Traffic
+#!desc=隐藏 qBittorrent 和其他 BT 客户端的流量
+#!category=Privacy
+
+[Replica]
+# 隐藏 BT 客户端的 User-Agent
+hide-user-agent = %APPEND% *qBittorrent*, *BitTorrent*, *Transmission*, *Deluge*, *libtorrent*, *aria2*, *Thunder*, *Xunlei*, *BitComet*, *uTorrent*, *Vuze*, *Azureus*
+
+# 隐藏 BT 客户端进程
+hide-process = %APPEND% qbittorrent, qbittorrent-nox, transmission-daemon, transmission-gtk, transmission-qt, deluged, deluge-gtk, aria2c, Thunder, BitComet, uTorrent, Vuze
+
+# 隐藏 BT 常用端口
+# 默认 BT 端口: 6881-6889
+# qBittorrent 默认: 8080 (WebUI), 6881 (BT)
+# Transmission 默认: 9091 (WebUI), 51413 (BT)
+hide-port = %APPEND% 6881-6889, 6969, 8080, 9091, 51413, 2710, 6771, 6900-6999, 7000-7999
+
+# 隐藏 Tracker 和种子相关域名
+hide-hostname = %APPEND% *tracker*, *torrent*, *announce*, *peer*, *dht*, *utorrent*, *bitcomet*, *btdig*, *btsow*, *btdb*, *thepiratebay*, *1337x*, *rarbg*, *yts*, *eztv*, *zooqle*, *torlock*, *limetorrents*, *kickass*, *extratorrent*, *rutracker*, *nyaa*
+
+# 隐藏 BT 相关关键词
+keyword-filter = %APPEND% torrent, magnet, btih, announce, tracker, peer, seed, leech, dht, metadata, piece, infohash, passkey, scrape, swarm, choke, unchoke, interested, bitfield, handshake, keepalive, udp-tracker, http-tracker, webseed, lpd, pex, ut_metadata, ut_pex
+
+# 隐藏 UDP 流量（BT 协议大量使用 UDP）
+hide-udp = true
+
+# 隐藏特定内容类型（种子文件）
+hide-content-type = %APPEND% application/x-bittorrent, application/x-torrent
+
+[Rule]
+# 可选：将 BT 流量路由到特定代理或直连
+# PROCESS-NAME,qbittorrent,DIRECT
+# PROCESS-NAME,transmission-daemon,DIRECT
+# DOMAIN-KEYWORD,tracker,DIRECT
+# DOMAIN-KEYWORD,torrent,DIRECT
