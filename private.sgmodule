@@ -2,4 +2,4 @@
 #!desc=Add Mitm
 
 [MITM]
-hostname = %APPEND% *.local, *.socloud.ltd, *.zcode.ltd, *.imagedelivery.net, appevent.cc, *.artbest.pro, *.xet.tech, *.nevercode.net, *.webscraping.ai, *.instagram.com
+hostname = %APPEND% *.local, *.socloud.ltd, *.zcode.ltd, *.imagedelivery.net, appevent.cc, *.artbest.pro, *.xet.tech, *.nevercode.net, *.webscraping.ai, *.instagram.com, *.swiftaikit.com
