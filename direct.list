@@ -16,6 +16,7 @@ DOMAIN-SUFFIX,pcbeta.com
 DOMAIN-SUFFIX,juejin.cn
 DOMAIN-SUFFIX,bochk.com
 DOMAIN-SUFFIX,gia.jd.com
+DOMAIN-SUFFIX,decodo.com
 
 PROCESS-NAME,WeChat
 PROCESS-NAME,Feishu
