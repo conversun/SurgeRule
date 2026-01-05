@@ -1,6 +1,7 @@
 DOMAIN,v4.plex.tv
 DOMAIN,dler.cloud
 DOMAIN,dsm.socloud.ltd
+DOMAIN,dashboard.decodo.com
 
 DOMAIN-SUFFIX,quickconnect.to
 DOMAIN-SUFFIX,conver.cc
@@ -16,7 +17,6 @@ DOMAIN-SUFFIX,pcbeta.com
 DOMAIN-SUFFIX,juejin.cn
 DOMAIN-SUFFIX,bochk.com
 DOMAIN-SUFFIX,gia.jd.com
-DOMAIN-SUFFIX,decodo.com
 
 PROCESS-NAME,WeChat
 PROCESS-NAME,Feishu
