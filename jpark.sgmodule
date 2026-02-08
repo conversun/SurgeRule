@@ -1,0 +1,10 @@
+#!name=JParking & JSLife Block
+#!desc=Block jparking.cn domains + reject specific APIs (incl. data-report)
+
+[Rule]
+DOMAIN,csg.jparking.cn,REJECT
+DOMAIN,psbg.jparking.cn,REJECT
+DOMAIN,e.jparking.cn,REJECT
+DOMAIN,cw.jparking.cn,REJECT
+
+URL-REGEX,^https:\/\/etgw\.jparking\.cn\/data-report-gateway\/syt-data-report\/receive,REJECT-DROP
