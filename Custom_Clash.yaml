@@ -250,6 +250,14 @@ rule-providers:
     interval: 172800
 
   # 2. 直连覆盖
+  Apple-CN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt"
+    path: ./ruleset/Apple-CN.txt
+    interval: 172800
+
   China-Media:
     type: http
     behavior: classical
@@ -388,6 +396,7 @@ rules:
   - RULE-SET,AWAvenue-Ads,REJECT
 
   # 2. 直连覆盖（防止被后续代理规则误匹配）
+  - RULE-SET,Apple-CN,DIRECT
   - RULE-SET,China-Media,DIRECT
 
   # 3. AI 服务
