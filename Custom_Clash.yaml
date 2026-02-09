@@ -334,7 +334,7 @@ rule-providers:
   Crypto:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/nicedayzhu/clash_rules@master/Crypto.yaml"
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Crypto/Crypto.yaml"
     path: ./ruleset/Crypto.yaml
     interval: 172800
 
@@ -371,15 +371,8 @@ rule-providers:
   China:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China.yaml"
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Classical.yaml"
     path: ./ruleset/China.yaml
-    interval: 172800
-
-  ChinaASN:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaASN/ChinaASN_Domain.yaml"
-    path: ./ruleset/ChinaASN.yaml
     interval: 172800
 
   LAN:
@@ -424,7 +417,6 @@ rules:
   # 8. 兜底（国内直连 → 海外代理 → LAN）
   - RULE-SET,Proxy,Outside
   - RULE-SET,China,DIRECT
-  - RULE-SET,ChinaASN,DIRECT
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,Others
