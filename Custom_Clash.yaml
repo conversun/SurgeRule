@@ -208,24 +208,34 @@ proxy-groups:
     proxies: []
 
   - name: 🇸🇬 SG
-    type: select
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
     filter: "(?!.*(Game))(新|Singapore|SG)"
     proxies: []
 
   - name: 🇼🇸 TW
-    type: fallback
+    type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
+    tolerance: 50
     filter: "(?!.*(Game))(台|Tai|TW)"
     proxies: []
 
   - name: 🇺🇲 US
-    type: select
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
     filter: "(?!.*(Game))(美|States|US)"
     proxies: []
 
   - name: 🇯🇵 JP
-    type: select
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
     filter: "(?!.*(Game))(日|Japan|JP)"
     proxies: []
 
