@@ -204,25 +204,30 @@ proxy-groups:
     url: http://cp.cloudflare.com/generate_204
     interval: 300
     tolerance: 50
-    proxies: # {{HK}}
+    filter: "(?!.*(Game))(港|Hong|HK)"
+    proxies: []
 
   - name: 🇸🇬 SG
     type: select
-    proxies: # {{SG}}
+    filter: "(?!.*(Game))(新|Singapore|SG)"
+    proxies: []
 
   - name: 🇼🇸 TW
     type: fallback
     url: http://cp.cloudflare.com/generate_204
     interval: 300
-    proxies: # {{TW}}
+    filter: "(?!.*(Game))(台|Tai|TW)"
+    proxies: []
 
   - name: 🇺🇲 US
     type: select
-    proxies: # {{US}}
+    filter: "(?!.*(Game))(美|States|US)"
+    proxies: []
 
   - name: 🇯🇵 JP
     type: select
-    proxies: # {{JP}}
+    filter: "(?!.*(Game))(日|Japan|JP)"
+    proxies: []
 
 # ====== 远程规则集 ======
 rule-providers:
