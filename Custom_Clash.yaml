@@ -1,0 +1,415 @@
+# ==============================================
+# Clash (mihomo) 配置模板
+# 转换自 Custom_QX.conf
+# ==============================================
+
+# ====== 基础设置 ======
+port: 7890
+socks-port: 7891
+mixed-port: 7893
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: strict
+global-client-fingerprint: chrome
+
+# ====== DNS ======
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter:
+    - "*.lan"
+    - localhost.ptlogin2.qq.com
+    - "+.srv.nintendo.net"
+    - "+.stun.playstation.net"
+    - "+.msftconnecttest.com"
+    - "+.msftncsi.com"
+    - "+.xboxlive.com"
+    - msftconnecttest.com
+    - xbox.*.microsoft.com
+    - "*.battlenet.com.cn"
+    - "*.logon.battlenet.com"
+  nameserver:
+    - 119.29.29.29
+    - 223.5.5.5
+  fallback:
+    - tls://1.1.1.1:853
+    - tls://8.8.8.8:853
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+
+proxies: # {{proxies}}
+
+# ====== 策略组 ======
+proxy-groups:
+  # ------ 基础策略 ------
+  - name: Outside
+    type: select
+    proxies:
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+      - DIRECT
+
+  - name: AI Suite
+    type: select
+    proxies:
+      - Outside
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 流媒体 ------
+  - name: Netflix
+    type: select
+    proxies:
+      - Global Media
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Global Media
+    type: select
+    proxies:
+      - Outside
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+      - DIRECT
+
+  - name: TikTok
+    type: select
+    proxies:
+      - Outside
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 服务 ------
+  - name: Apple
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: GitHub
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Telegram
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Mail
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 金融 ------
+  - name: Crypto
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: PayPal
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Stripe
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 工具 ------
+  - name: Speedtest
+    type: select
+    proxies:
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇼🇸 TW
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 兜底 ------
+  - name: Others
+    type: select
+    proxies:
+      - Outside
+      - DIRECT
+
+  # ------ 地区节点组 ------
+  - name: 🇭🇰 HK
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies: # {{HK}}
+
+  - name: 🇸🇬 SG
+    type: select
+    proxies: # {{SG}}
+
+  - name: 🇼🇸 TW
+    type: fallback
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    proxies: # {{TW}}
+
+  - name: 🇺🇲 US
+    type: select
+    proxies: # {{US}}
+
+  - name: 🇯🇵 JP
+    type: select
+    proxies: # {{JP}}
+
+# ====== 远程规则集 ======
+rule-providers:
+  # 1. 广告拦截
+  AWAvenue-Ads:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.yaml"
+    path: ./ruleset/AWAvenue-Ads.yaml
+    interval: 172800
+
+  # 2. 直连覆盖
+  China-Media:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaMedia/ChinaMedia.yaml"
+    path: ./ruleset/China-Media.yaml
+    interval: 172800
+
+  # 3. AI 服务
+  Claude:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Claude/Claude.yaml"
+    path: ./ruleset/Claude.yaml
+    interval: 172800
+
+  OpenAI:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI.yaml"
+    path: ./ruleset/OpenAI.yaml
+    interval: 172800
+
+  # 4. 流媒体
+  Netflix:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix.yaml"
+    path: ./ruleset/Netflix.yaml
+    interval: 172800
+
+  TikTok:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TikTok/TikTok.yaml"
+    path: ./ruleset/TikTok.yaml
+    interval: 172800
+
+  YouTube:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml"
+    path: ./ruleset/YouTube.yaml
+    interval: 172800
+
+  Global-Media:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GlobalMedia/GlobalMedia.yaml"
+    path: ./ruleset/Global-Media.yaml
+    interval: 172800
+
+  # 5. 服务 & 工具
+  Apple:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple.yaml"
+    path: ./ruleset/Apple.yaml
+    interval: 172800
+
+  GitHub:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml"
+    path: ./ruleset/GitHub.yaml
+    interval: 172800
+
+  Telegram:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Telegram/Telegram.yaml"
+    path: ./ruleset/Telegram.yaml
+    interval: 172800
+
+  Mail:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Mail/Mail.yaml"
+    path: ./ruleset/Mail.yaml
+    interval: 172800
+
+  # 6. 金融
+  Crypto:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/nicedayzhu/clash_rules@master/Crypto.yaml"
+    path: ./ruleset/Crypto.yaml
+    interval: 172800
+
+  PayPal:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/PayPal/PayPal.yaml"
+    path: ./ruleset/PayPal.yaml
+    interval: 172800
+
+  Stripe:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Stripe/Stripe.yaml"
+    path: ./ruleset/Stripe.yaml
+    interval: 172800
+
+  # 7. 工具
+  Speedtest:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml"
+    path: ./ruleset/Speedtest.yaml
+    interval: 172800
+
+  # 8. 兜底
+  Proxy:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy.yaml"
+    path: ./ruleset/Proxy.yaml
+    interval: 172800
+
+  China:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China.yaml"
+    path: ./ruleset/China.yaml
+    interval: 172800
+
+  ChinaASN:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaASN/ChinaASN_Domain.yaml"
+    path: ./ruleset/ChinaASN.yaml
+    interval: 172800
+
+  LAN:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Lan/Lan.yaml"
+    path: ./ruleset/LAN.yaml
+    interval: 172800
+
+# ====== 分流规则 ======
+rules:
+  # 1. 广告拦截（最高优先级）
+  - RULE-SET,AWAvenue-Ads,REJECT
+
+  # 2. 直连覆盖（防止被后续代理规则误匹配）
+  - RULE-SET,China-Media,DIRECT
+
+  # 3. AI 服务
+  - RULE-SET,Claude,AI Suite
+  - RULE-SET,OpenAI,AI Suite
+
+  # 4. 流媒体
+  - RULE-SET,Netflix,Netflix
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,YouTube,Global Media
+  - RULE-SET,Global-Media,Global Media
+
+  # 5. 服务 & 工具
+  - RULE-SET,Apple,Apple
+  - RULE-SET,GitHub,GitHub
+  - RULE-SET,Telegram,Telegram
+  - RULE-SET,Mail,Mail
+
+  # 6. 金融
+  - RULE-SET,Crypto,Crypto
+  - RULE-SET,PayPal,PayPal
+  - RULE-SET,Stripe,Stripe
+
+  # 7. 工具
+  - RULE-SET,Speedtest,Speedtest
+
+  # 8. 兜底（国内直连 → 海外代理 → LAN）
+  - RULE-SET,Proxy,Outside
+  - RULE-SET,China,DIRECT
+  - RULE-SET,ChinaASN,DIRECT
+  - RULE-SET,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Others
