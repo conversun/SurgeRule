@@ -19,32 +19,41 @@ global-client-fingerprint: chrome
 
 # ====== DNS ======
 dns:
-  enable: true
-  listen: 0.0.0.0:1053
-  ipv6: false
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-filter:
-    - "*.lan"
-    - localhost.ptlogin2.qq.com
-    - "+.srv.nintendo.net"
-    - "+.stun.playstation.net"
-    - "+.msftconnecttest.com"
-    - "+.msftncsi.com"
-    - "+.xboxlive.com"
-    - msftconnecttest.com
-    - xbox.*.microsoft.com
-    - "*.battlenet.com.cn"
-    - "*.logon.battlenet.com"
-  nameserver:
-    - 119.29.29.29
-    - 223.5.5.5
-  fallback:
-    - tls://1.1.1.1:853
-    - tls://8.8.8.8:853
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
+    enable: true
+    listen: 0.0.0.0:1053
+    ipv6: false
+    prefer-h3: true
+    respect-rules: true
+    enhanced-mode: fake-ip
+    use-hosts: true
+    # 用于解析nameserver中的域名dns服务器，理论上如果nameserver中的dns服务器都是ip类的，这里也可以不填
+    # 前两个是我这边电信的运营商dns，可以换成你自己的，也可以全部使用大厂的公共dns
+    # 由于只用来解析nameserver，不使用doh或dot
+    default-nameserver:
+        - 119.29.29.29
+        - 223.5.5.5
+    # 在这个配置中，只用来解析没匹配到nameserver-policy的规则，几乎都是访问外网，因此使用google和cf的doh
+    nameserver:
+        - https://dns.google/dns-query
+        - https://1.1.1.1/dns-query
+    # 用于解析代理节点的域名
+    proxy-server-nameserver:
+        - https://223.5.5.5/dns-query
+        - https://1.12.12.12/dns-query
+    # 国内访问的规则使用国内的dns，不考虑dns泄露，不使用doh或dot
+    nameserver-policy:
+        "geosite:cn,apple-cn,category-games@cn,private":
+            - 119.29.29.29
+            - 223.5.5.5
+    fake-ip-range: 28.0.0.1/8
+    fake-ip-filter:
+        - '*'
+        - '+.lan'
+        - '+.local'
+        - +.stun.*.*
+        - +.stun.*.*.*
+        - +.stun.*.*.*.*
+        - +.stun.*.*.*.*.*
 
 proxies: # {{proxies}}
 
@@ -376,11 +385,11 @@ rule-providers:
     interval: 172800
 
   # 8. 兜底
-  Global:
+  Proxy:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Global/Global_Classical.yaml"
-    path: ./ruleset/Global.yaml
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy_Classical.yaml"
+    path: ./ruleset/Proxy.yaml
     interval: 172800
 
   China:
@@ -432,7 +441,7 @@ rules:
   - RULE-SET,Speedtest,Speedtest
 
   # 8. 兜底（国内直连 → 海外代理 → LAN）
-  - RULE-SET,Global,Outside
+  - RULE-SET,Proxy,Outside
   - RULE-SET,China,DIRECT
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
