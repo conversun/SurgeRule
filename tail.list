@@ -1,0 +1,12 @@
+# Tailscale 网段
+IP-CIDR,100.64.0.0/10,WG-Home,no-resolve
+IP-CIDR6,fd7a:115c:a1e0::/48,WG-Home,no-resolve
+
+# WireGuard 内网
+IP-CIDR,10.10.0.0/24,WG-Home,no-resolve
+
+# MagicDNS 域名
+DOMAIN-SUFFIX,ts.net,WG-Home
+
+# 家庭局域网（按需取消注释）
+# IP-CIDR,192.168.0.0/16,WG-Home,no-resolve
