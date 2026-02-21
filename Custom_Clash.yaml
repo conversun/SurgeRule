@@ -326,11 +326,11 @@ rule-providers:
     interval: 172800
 
   # 5. 服务 & 工具
-  Apple:
+  AppleProxy:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Apple/Apple.yaml"
-    path: ./ruleset/Apple.yaml
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleProxy/AppleProxy.yaml"
+    path: ./ruleset/AppleProxy.yaml
     interval: 172800
 
   GitHub:
@@ -399,6 +399,13 @@ rule-providers:
     path: ./ruleset/China.yaml
     interval: 172800
 
+  ChinaIPs:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaIPs/ChinaIPs_Classical.yaml"
+    path: ./ruleset/ChinaIPs.yaml
+    interval: 172800
+
   LAN:
     type: http
     behavior: classical
@@ -427,7 +434,7 @@ rules:
   - RULE-SET,Global-Media,Global Media
 
   # 5. 服务 & 工具
-  - RULE-SET,Apple,Apple
+  - RULE-SET,AppleProxy,Apple
   - RULE-SET,GitHub,GitHub
   - RULE-SET,Telegram,Telegram
   - RULE-SET,Mail,Mail
@@ -443,6 +450,7 @@ rules:
   # 8. 兜底（国内直连 → 海外代理 → LAN）
   - RULE-SET,Proxy,Outside
   - RULE-SET,China,DIRECT
+  - RULE-SET,ChinaIPs,DIRECT
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,Others
