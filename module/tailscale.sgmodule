@@ -1,0 +1,12 @@
+#!name=Tailscale Host
+#!desc=Tailscale MagicDNS 解析 + 设备静态映射
+
+[Host]
+# MagicDNS 通配解析
+*.ts.net = server:100.100.100.100
+
+# 设备静态映射
+mbp.ts.net = 100.66.162.49
+rog.ts.net = 100.112.83.96
+xlxds.ts.net = 100.75.210.125
+minis.ts.net = 100.65.162.49
