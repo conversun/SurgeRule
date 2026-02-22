@@ -23,7 +23,6 @@ private/                   # Custom rule lists (referenced by RULE-SET URLs)
   direct.list              #   Domains to bypass proxy
   proxy.list               #   Domains to force proxy
   ssh.list                 #   SSH port rules
-  smm.list                 #   Social media marketing
   ai.list                  #   AI service domains
   apple.list               #   Apple-specific domains
   tail.list                #   Tailscale/VPN network ranges
@@ -52,7 +51,6 @@ OR,((DOMAIN,a.com), (DOMAIN,b.com))     # Logical OR
 |-----------|------|---------|
 | Single exact domain | `DOMAIN` | `DOMAIN,app.plex.tv` |
 | Service with subdomains | `DOMAIN-SUFFIX` | `DOMAIN-SUFFIX,anthropic.com` |
-| Pattern across domains | `DOMAIN-KEYWORD` | `DOMAIN-KEYWORD,smm` |
 | macOS app bypass | `PROCESS-NAME` | `PROCESS-NAME,WeChat` |
 | Port-based routing | `DEST-PORT` | `DEST-PORT,22` |
 | VPN/internal ranges | `IP-CIDR` | `IP-CIDR,100.64.0.0/10,no-resolve` |
@@ -96,7 +94,7 @@ The `[Rule]` section in `Custom_Surge.conf` uses numbered section headers:
 ## Proxy Group Naming
 
 - **Regions**: Emoji flag + code — `🇭🇰 HK`, `🇺🇲 US`, `🇼🇸 TW`, `🇸🇬 SG`, `🇯🇵 JP`
-- **Services**: English names — `AI`, `Media`, `TikTok`, `GitHub`, `Telegram`, `Tunnel`, `SMM`
+- **Services**: English names — `AI`, `Media`, `TikTok`, `GitHub`, `Telegram`, `Tunnel`
 - **Finance**: English names — `Crypto`, `PayPal`, `Stripe`
 - **Tools**: English names — `Speed`
 - Region groups use `smart` policy with `policy-regex-filter` and `(?!.*(Game))` negative lookahead
