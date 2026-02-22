@@ -11,3 +11,6 @@ URL-REGEX,"^https:\/\/sytgate\.jslife\.com\.cn\/base-gateway\/member\/mbr\/getPu
 URL-REGEX,"^https:\/\/sytgate\.jslife\.com\.cn\/base-gateway\/jscpc-favour\/period\/time\/favour\/goods\/list",REJECT-TINYGIF
 URL-REGEX,"^https:\/\/sytgate\.jslife\.com\.cn\/core-gateway\/member\/coupon\/",REJECT-TINYGIF
 URL-REGEX,^https:\/\/etgw\.jparking\.cn\/data-report-gateway\/syt-data-report\/receive,REJECT-DROP
+
+[Mitm]
+hostname = sytgate.jslife.com.cn, etgw.jparking.cn
