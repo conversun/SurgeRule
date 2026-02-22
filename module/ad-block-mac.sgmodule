@@ -1,0 +1,11 @@
+#!name=Ad Block (macOS)
+#!desc=广告拦截 - macOS 适配，使用 REJECT 避免网页 loading 卡顿
+#!category=Ad Block
+
+[Rule]
+RULE-SET,https://ruleset.skk.moe/List/non_ip/sogouinput.conf,REJECT,extended-matching
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject.conf,REJECT,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject.conf,REJECT,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-no-drop.conf,REJECT,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-drop.conf,REJECT,extended-matching
+RULE-SET,https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list,REJECT,extended-matching

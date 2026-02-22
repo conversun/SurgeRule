@@ -1,0 +1,7 @@
+#!name=Ad Block (macOS Lite)
+#!desc=macOS 精简广告拦截，仅保留通用广告域名规则
+#!category=Ad Block
+
+[Rule]
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject.conf,REJECT,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject.conf,REJECT,extended-matching

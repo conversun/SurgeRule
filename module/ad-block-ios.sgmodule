@@ -1,0 +1,11 @@
+#!name=Ad Block (iOS)
+#!desc=广告拦截 - iOS 适配，使用 REJECT-DROP 省电
+#!category=Ad Block
+
+[Rule]
+RULE-SET,https://ruleset.skk.moe/List/non_ip/sogouinput.conf,REJECT-DROP,extended-matching
+DOMAIN-SET,https://ruleset.skk.moe/List/domainset/reject.conf,REJECT-DROP,extended-matching,pre-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject.conf,REJECT-DROP,extended-matching,pre-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-no-drop.conf,REJECT-NO-DROP,extended-matching
+RULE-SET,https://ruleset.skk.moe/List/non_ip/reject-drop.conf,REJECT-DROP,extended-matching
+RULE-SET,https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list,REJECT-DROP,extended-matching,pre-matching
