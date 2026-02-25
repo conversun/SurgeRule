@@ -64,7 +64,7 @@ proxies: # {{proxies}}
 # ====== 策略组 ======
 proxy-groups:
   # ------ 基础策略 ------
-  - name: Outside
+  - name: Proxy
     type: select
     proxies:
       - 🇭🇰 HK
@@ -74,30 +74,20 @@ proxy-groups:
       - 🇺🇲 US
       - DIRECT
 
-  - name: AI Suite
+  - name: AI
     type: select
     proxies:
-      - Outside
+      - Proxy
       - 🇸🇬 SG
       - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
   # ------ 流媒体 ------
-  - name: Netflix
+  - name: Media
     type: select
     proxies:
-      - Global Media
-      - 🇭🇰 HK
-      - 🇸🇬 SG
-      - 🇼🇸 TW
-      - 🇯🇵 JP
-      - 🇺🇲 US
-
-  - name: Global Media
-    type: select
-    proxies:
-      - Outside
+      - Proxy
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -108,7 +98,7 @@ proxy-groups:
   - name: TikTok
     type: select
     proxies:
-      - Outside
+      - Proxy
       - 🇸🇬 SG
       - 🇼🇸 TW
       - 🇯🇵 JP
@@ -118,7 +108,7 @@ proxy-groups:
   - name: Apple
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -129,7 +119,7 @@ proxy-groups:
   - name: GitHub
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -140,7 +130,7 @@ proxy-groups:
   - name: Telegram
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -148,10 +138,10 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
-  - name: Mail
+  - name: Tunnel
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -163,7 +153,7 @@ proxy-groups:
   - name: Crypto
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -174,7 +164,7 @@ proxy-groups:
   - name: PayPal
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -185,7 +175,7 @@ proxy-groups:
   - name: Stripe
     type: select
     proxies:
-      - Outside
+      - Proxy
       - DIRECT
       - 🇭🇰 HK
       - 🇸🇬 SG
@@ -293,6 +283,13 @@ rule-providers:
     path: ./ruleset/OpenAI.yaml
     interval: 172800
 
+  Copilot:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Copilot/Copilot.yaml"
+    path: ./ruleset/Copilot.yaml
+    interval: 172800
+
   # 4. 流媒体
   Netflix:
     type: http
@@ -382,19 +379,19 @@ rule-providers:
     interval: 172800
 
   # 8. 国内域名
-  China:
+  China_Classical:
     type: http
     behavior: classical
     url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Classical.yaml"
-    path: ./ruleset/China.yaml
+    path: ./ruleset/China_Classical.yaml
     interval: 172800
 
   # 9. 兜底
-  Proxy:
+  Proxy_Classical:
     type: http
     behavior: classical
     url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy_Classical.yaml"
-    path: ./ruleset/Proxy.yaml
+    path: ./ruleset/Proxy_Classical.yaml
     interval: 172800
 
   LAN:
@@ -415,20 +412,22 @@ rules:
   - RULE-SET,SteamCN,DIRECT
 
   # 3. AI 服务
-  - RULE-SET,Claude,AI Suite
-  - RULE-SET,OpenAI,AI Suite
+  - RULE-SET,Claude,AI
+  - RULE-SET,OpenAI,AI
+  - RULE-SET,Copilot,AI
 
   # 4. 流媒体
-  - RULE-SET,Netflix,Netflix
+  - RULE-SET,Netflix,Media
+  - RULE-SET,YouTube,Media
   - RULE-SET,TikTok,TikTok
-  - RULE-SET,YouTube,Global Media
-  - RULE-SET,Global-Media,Global Media
+  - RULE-SET,Global-Media,Media
 
   # 5. 服务 & 工具
   - RULE-SET,AppleProxy,Apple
   - RULE-SET,GitHub,GitHub
   - RULE-SET,Telegram,Telegram
-  - RULE-SET,Mail,Mail
+  - RULE-SET,Mail,Tunnel
+  - DST-PORT,22,Tunnel
 
   # 6. 金融
   - RULE-SET,Crypto,Crypto
@@ -439,10 +438,10 @@ rules:
   - RULE-SET,Speedtest,Speedtest
 
   # 8. 国内域名
-  - RULE-SET,China,DIRECT
+  - RULE-SET,China_Classical,DIRECT
 
   # 9. 兜底
-  - RULE-SET,Proxy,Outside
+  - RULE-SET,Proxy_Classical,Proxy
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
-  - MATCH,Outside
+  - MATCH,Proxy
