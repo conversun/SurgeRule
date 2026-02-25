@@ -423,6 +423,8 @@ rules:
   - RULE-SET,Global-Media,Media
 
   # 5. 服务 & 工具
+  - RULE-SET,Mail,Tunnel
+  - DST-PORT,22,Tunnel
   - RULE-SET,AppleProxy,Apple
   - RULE-SET,GitHub,GitHub
   - RULE-SET,Telegram,Telegram
