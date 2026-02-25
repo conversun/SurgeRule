@@ -194,6 +194,17 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
+  - name: Check
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇼🇸 TW
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   # ------ 地区节点组 ------
   - name: 🇭🇰 HK
     type: url-test
@@ -378,6 +389,14 @@ rule-providers:
     path: ./ruleset/Speedtest.yaml
     interval: 172800
 
+  Check:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://raw.githubusercontent.com/conversun/SurgeRule/main/private/check.list"
+    path: ./ruleset/Check.list
+    interval: 172800
+
   # 8. 国内域名
   China_Classical:
     type: http
@@ -438,6 +457,7 @@ rules:
 
   # 7. 工具
   - RULE-SET,Speedtest,Speedtest
+  - RULE-SET,Check,Check
 
   # 8. 国内域名
   - RULE-SET,China_Classical,DIRECT

@@ -1,0 +1,45 @@
+# IP Check & DNS Leak Test
+# 网络检测工具（IP 查询、DNS 泄露、浏览器指纹）
+
+# --- IP 查询 ---
+IP-CIDR,142.251.215.0/24,no-resolve
+DOMAIN-SUFFIX,ipw.cn
+DOMAIN-SUFFIX,ip111.cn
+DOMAIN-SUFFIX,ip125.com
+DOMAIN-SUFFIX,ipcheck.im
+DOMAIN-SUFFIX,ip-api.com
+DOMAIN-SUFFIX,ipleak.net
+DOMAIN-SUFFIX,ip-score.com
+DOMAIN-SUFFIX,ifconfig.me
+DOMAIN-SUFFIX,jsonp-ip.com
+DOMAIN-SUFFIX,ping0.cc
+DOMAIN-SUFFIX,test-ipv6.com
+
+# --- DNS 泄露检测 ---
+DOMAIN-SUFFIX,dnscheck.tools
+DOMAIN-SUFFIX,dnsleaktest.com
+DOMAIN-SUFFIX,dnsleaktest.org
+
+# --- 浏览器指纹 ---
+DOMAIN-SUFFIX,browserleaks.com
+DOMAIN-SUFFIX,browserleaks.net
+DOMAIN-SUFFIX,browserleaks.org
+DOMAIN-SUFFIX,browserscan.net
+DOMAIN-SUFFIX,whoer.net
+DOMAIN-SUFFIX,incolumitas.com
+DOMAIN-SUFFIX,scamalytics.com
+
+# --- VPN 检测 ---
+DOMAIN-SUFFIX,surfshark.com
+DOMAIN-SUFFIX,surfsharkdns.com
+
+# --- 其他检测工具 ---
+DOMAIN-SUFFIX,vultr.com
+DOMAIN-SUFFIX,sspanel.net
+DOMAIN-SUFFIX,1-b.net
+DOMAIN-SUFFIX,null-addr.com
+DOMAIN-SUFFIX,null-addr.net
+DOMAIN-SUFFIX,null-addr.org
+DOMAIN-SUFFIX,null-addr.biz
+DOMAIN-SUFFIX,null-addr.info
+DOMAIN-SUFFIX,addr.tools
