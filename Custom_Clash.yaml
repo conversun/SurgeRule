@@ -1,8 +1,3 @@
-# ==============================================
-# Clash (mihomo) 配置模板
-# 转换自 Custom_QX.conf
-# ==============================================
-
 # ====== 基础设置 ======
 port: 7890
 socks-port: 7891
@@ -195,6 +190,17 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Check
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇼🇸 TW
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Final
     type: select
     proxies:
       - Proxy
@@ -466,4 +472,4 @@ rules:
   - RULE-SET,Proxy_Classical,Proxy
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
-  - MATCH,Proxy
+  - MATCH,Final
