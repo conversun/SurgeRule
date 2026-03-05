@@ -6,40 +6,74 @@ allow-lan: true
 bind-address: "*"
 mode: rule
 log-level: info
+ipv6: false
 external-controller: 127.0.0.1:9090
 unified-delay: true
 tcp-concurrent: true
 find-process-mode: strict
+etag-support: true
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 
 # ====== GeoIP ======
+geodata-mode: true
+geodata-loader: memconservative
+geo-auto-update: true
+geo-update-interval: 24
 geox-url:
-  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb"
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
 
 # ====== DNS ======
 dns:
-    enable: true
-    listen: 0.0.0.0:1053
-    ipv6: false
-    respect-rules: true
-    enhanced-mode: fake-ip
-    use-hosts: true
-    nameserver:
-        - 119.29.29.29
-        - 223.5.5.5
-    proxy-server-nameserver:
-        - 119.29.29.29
-        - 223.5.5.5
-    nameserver-policy:
-        "geosite:cn,apple-cn,category-games@cn,private":
-            - 119.29.29.29
-            - 223.5.5.5
-    fake-ip-range: 28.0.0.1/8
-    fake-ip-filter:
-        - '*'
-        - '+.lan'
-        - '+.local'
-        - '+.stun.*'
+  enable: true
+  cache-algorithm: arc
+  prefer-h3: false
+  listen: 0.0.0.0:1053
+  ipv6: false
+  respect-rules: true
+  use-hosts: true
+  use-system-hosts: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  direct-nameserver:
+    - system
+  direct-nameserver-follow-policy: true
+  fallback:
+    - 1.1.1.1
+    - 8.8.8.8
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    geosite:
+      - gfw
+    ipcidr:
+      - 240.0.0.0/4
+  nameserver-policy:
+    "geosite:cn,apple-cn,category-games@cn,private":
+      - 223.5.5.5
+      - 119.29.29.29
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - 'localhost.ptlogin2.qq.com'
+    - 'time.windows.com'
+    - 'time.apple.com'
+    - '+.pool.ntp.org'
+    - '+.stun.*'
 
 proxies: # {{proxies}}
 
