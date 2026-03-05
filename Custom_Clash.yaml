@@ -10,7 +10,7 @@ external-controller: 127.0.0.1:9090
 unified-delay: true
 tcp-concurrent: true
 find-process-mode: strict
-global-client-fingerprint: chrome
+
 
 # ====== GeoIP ======
 geox-url:
@@ -25,6 +25,9 @@ dns:
     enhanced-mode: fake-ip
     use-hosts: true
     nameserver:
+        - 119.29.29.29
+        - 223.5.5.5
+    proxy-server-nameserver:
         - 119.29.29.29
         - 223.5.5.5
     nameserver-policy:
