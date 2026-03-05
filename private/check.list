@@ -14,6 +14,7 @@ DOMAIN-SUFFIX,ifconfig.me
 DOMAIN-SUFFIX,jsonp-ip.com
 DOMAIN-SUFFIX,ping0.cc
 DOMAIN-SUFFIX,test-ipv6.com
+DOMAIN-SUFFIX,ipinfo.io
 
 # --- DNS 泄露检测 ---
 DOMAIN-SUFFIX,dnscheck.tools
