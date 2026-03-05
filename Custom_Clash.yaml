@@ -122,6 +122,17 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
+  - name: Google
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇼🇸 TW
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   - name: Telegram
     type: select
     proxies:
@@ -200,6 +211,17 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
+  - name: CDN
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇼🇸 TW
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   - name: Final
     type: select
     proxies:
@@ -254,7 +276,7 @@ proxy-groups:
 
 # ====== 远程规则集 ======
 rule-providers:
-  # 1. 广告拦截
+  # --- 广告拦截 ---
   AWAvenue-Ads:
     type: http
     behavior: domain
@@ -262,7 +284,23 @@ rule-providers:
     path: ./ruleset/AWAvenue-Ads.yaml
     interval: 172800
 
-  # 2. 直连覆盖
+  # --- 国内直连 ---
+  Apple-CDN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cdn.txt"
+    path: ./ruleset/Apple-CDN.txt
+    interval: 172800
+
+  Microsoft-CDN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt"
+    path: ./ruleset/Microsoft-CDN.txt
+    interval: 172800
+
   Apple-CN:
     type: http
     behavior: classical
@@ -285,7 +323,7 @@ rule-providers:
     path: ./ruleset/SteamCN.yaml
     interval: 172800
 
-  # 3. AI 服务
+  # --- AI 服务 ---
   Claude:
     type: http
     behavior: classical
@@ -307,7 +345,7 @@ rule-providers:
     path: ./ruleset/Copilot.yaml
     interval: 172800
 
-  # 4. 流媒体
+  # --- 流媒体 ---
   Netflix:
     type: http
     behavior: classical
@@ -336,7 +374,7 @@ rule-providers:
     path: ./ruleset/Global-Media.yaml
     interval: 172800
 
-  # 5. 服务 & 工具
+  # --- 服务 ---
   AppleProxy:
     type: http
     behavior: classical
@@ -349,6 +387,13 @@ rule-providers:
     behavior: classical
     url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml"
     path: ./ruleset/GitHub.yaml
+    interval: 172800
+
+  Google:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml"
+    path: ./ruleset/Google.yaml
     interval: 172800
 
   Telegram:
@@ -365,7 +410,7 @@ rule-providers:
     path: ./ruleset/Mail.yaml
     interval: 172800
 
-  # 6. 金融
+  # --- 金融 ---
   Crypto:
     type: http
     behavior: classical
@@ -387,7 +432,7 @@ rule-providers:
     path: ./ruleset/Stripe.yaml
     interval: 172800
 
-  # 7. 工具
+  # --- 工具 ---
   Speedtest:
     type: http
     behavior: classical
@@ -403,7 +448,40 @@ rule-providers:
     path: ./ruleset/Check.list
     interval: 172800
 
-  # 8. 国内域名
+  # --- CDN & 下载 ---
+  CDN-Domainset:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://ruleset.skk.moe/Clash/domainset/cdn.txt"
+    path: ./ruleset/CDN-Domainset.txt
+    interval: 172800
+
+  CDN-NonIP:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/cdn.txt"
+    path: ./ruleset/CDN-NonIP.txt
+    interval: 172800
+
+  Download-Domainset:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://ruleset.skk.moe/Clash/domainset/download.txt"
+    path: ./ruleset/Download-Domainset.txt
+    interval: 172800
+
+  Download-NonIP:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/download.txt"
+    path: ./ruleset/Download-NonIP.txt
+    interval: 172800
+
+  # --- 国内域名 ---
   China_Classical:
     type: http
     behavior: classical
@@ -411,7 +489,16 @@ rule-providers:
     path: ./ruleset/China_Classical.yaml
     interval: 172800
 
-  # 9. 兜底
+  # --- IP 规则 ---
+  IP-Reject:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/ip/reject.txt"
+    path: ./ruleset/IP-Reject.txt
+    interval: 172800
+
+  # --- 兜底 ---
   Proxy_Classical:
     type: http
     behavior: classical
@@ -428,10 +515,12 @@ rule-providers:
 
 # ====== 分流规则 ======
 rules:
-  # 1. 广告拦截（最高优先级）
+  # 1. 广告拦截
   - RULE-SET,AWAvenue-Ads,REJECT
 
-  # 2. 直连覆盖（防止被后续代理规则误匹配）
+  # 2. 国内直连（防止被后续代理规则误匹配）
+  - RULE-SET,Apple-CDN,DIRECT
+  - RULE-SET,Microsoft-CDN,DIRECT
   - RULE-SET,Apple-CN,DIRECT
   - RULE-SET,China-Media,DIRECT
   - RULE-SET,SteamCN,DIRECT
@@ -443,18 +532,17 @@ rules:
 
   # 4. 流媒体
   - RULE-SET,Netflix,Media
-  - RULE-SET,YouTube,Media
   - RULE-SET,TikTok,TikTok
+  - RULE-SET,YouTube,Media
   - RULE-SET,Global-Media,Media
 
-  # 5. 服务 & 工具
+  # 5. 服务
   - RULE-SET,Mail,Tunnel
   - DST-PORT,22,Tunnel
   - RULE-SET,AppleProxy,Apple
   - RULE-SET,GitHub,GitHub
   - RULE-SET,Telegram,Telegram
-  - RULE-SET,Mail,Tunnel
-  - DST-PORT,22,Tunnel
+  - RULE-SET,Google,Google
 
   # 6. 金融
   - RULE-SET,Crypto,Crypto
@@ -465,10 +553,19 @@ rules:
   - RULE-SET,Speedtest,Speedtest
   - RULE-SET,Check,Check
 
-  # 8. 国内域名
+  # 8. CDN & 下载
+  - RULE-SET,CDN-Domainset,CDN
+  - RULE-SET,CDN-NonIP,CDN
+  - RULE-SET,Download-Domainset,CDN
+  - RULE-SET,Download-NonIP,CDN
+
+  # 9. 国内域名
   - RULE-SET,China_Classical,DIRECT
 
-  # 9. 兜底
+  # 10. IP 规则
+  - RULE-SET,IP-Reject,REJECT
+
+  # 11. 兜底
   - RULE-SET,Proxy_Classical,Proxy
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
