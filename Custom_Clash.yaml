@@ -88,12 +88,16 @@ proxy-groups:
       - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
+      - 🏠 ISP
       - DIRECT
 
   - name: AI
     type: select
     proxies:
       - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
       - 🇯🇵 JP
@@ -104,17 +108,21 @@ proxy-groups:
     type: select
     proxies:
       - Proxy
+      - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
-      - DIRECT
 
   - name: TikTok
     type: select
     proxies:
       - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
       - 🇯🇵 JP
@@ -126,6 +134,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -137,6 +146,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -148,6 +158,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -159,6 +170,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -170,6 +182,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -182,6 +195,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -193,6 +207,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -204,6 +219,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
       - 🇼🇸 TW
@@ -226,6 +242,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇼🇸 TW
       - 🇸🇬 SG
@@ -237,6 +254,7 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇼🇸 TW
       - 🇸🇬 SG
@@ -248,11 +266,18 @@ proxy-groups:
     proxies:
       - Proxy
       - DIRECT
+      - 🏠 ISP
       - 🇭🇰 HK
       - 🇼🇸 TW
       - 🇸🇬 SG
       - 🇯🇵 JP
       - 🇺🇲 US
+
+  # ------ ISP ------
+  - name: 🏠 ISP
+    type: select
+    filter: "(?!.*(Game))(美|States|US)"
+    proxies: []
 
   # ------ 地区节点组 ------
   - name: 🇭🇰 HK
@@ -345,25 +370,12 @@ rule-providers:
     interval: 172800
 
   # --- AI 服务 ---
-  Claude:
+  AI-SKK:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Claude/Claude.yaml"
-    path: ./ruleset/Claude.yaml
-    interval: 172800
-
-  OpenAI:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/OpenAI/OpenAI.yaml"
-    path: ./ruleset/OpenAI.yaml
-    interval: 172800
-
-  Copilot:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Copilot/Copilot.yaml"
-    path: ./ruleset/Copilot.yaml
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/ai.txt"
+    path: ./ruleset/AI-SKK.txt
     interval: 172800
 
   # --- 流媒体 ---
@@ -547,9 +559,7 @@ rules:
   - RULE-SET,SteamCN,DIRECT
 
   # 3. AI 服务
-  - RULE-SET,Claude,AI
-  - RULE-SET,OpenAI,AI
-  - RULE-SET,Copilot,AI
+  - RULE-SET,AI-SKK,AI
 
   # 4. 流媒体
   - RULE-SET,Netflix,Media
