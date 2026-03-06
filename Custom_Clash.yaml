@@ -81,6 +81,7 @@ proxies: # {{proxies}}
 proxy-groups:
   # ------ 基础策略 ------
   - name: Proxy
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Global.png
     type: select
     proxies:
       - 🇭🇰 HK
@@ -92,6 +93,7 @@ proxy-groups:
       - DIRECT
 
   - name: AI
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/AI.png
     type: select
     proxies:
       - Proxy
@@ -105,6 +107,7 @@ proxy-groups:
 
   # ------ 流媒体 ------
   - name: Media
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Stream.png
     type: select
     proxies:
       - Proxy
@@ -117,6 +120,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: TikTok
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/TikTok.png
     type: select
     proxies:
       - Proxy
@@ -130,6 +134,7 @@ proxy-groups:
 
   # ------ 服务 ------
   - name: Apple
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Apple.png
     type: select
     proxies:
       - Proxy
@@ -142,6 +147,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: GitHub
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/GitHub.png
     type: select
     proxies:
       - Proxy
@@ -154,6 +160,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Google
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Google.png
     type: select
     proxies:
       - Proxy
@@ -166,6 +173,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Telegram
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Telegram.png
     type: select
     proxies:
       - Proxy
@@ -178,6 +186,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Tunnel
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Link.png
     type: select
     proxies:
       - Proxy
@@ -191,6 +200,7 @@ proxy-groups:
 
   # ------ 金融 ------
   - name: Crypto
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Crypto.png
     type: select
     proxies:
       - Proxy
@@ -203,6 +213,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: PayPal
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/PayPal.png
     type: select
     proxies:
       - Proxy
@@ -228,6 +239,7 @@ proxy-groups:
 
   # ------ 工具 ------
   - name: Speedtest
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/SpeedTest.png
     type: select
     proxies:
       - DIRECT
@@ -238,6 +250,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Check
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Location.png
     type: select
     proxies:
       - Proxy
@@ -250,6 +263,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: CDN
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Cloud.png
     type: select
     proxies:
       - Proxy
@@ -262,6 +276,7 @@ proxy-groups:
       - 🇺🇲 US
 
   - name: Final
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Fish.png
     type: select
     proxies:
       - Proxy
@@ -275,12 +290,14 @@ proxy-groups:
 
   # ------ ISP ------
   - name: 🏠 ISP
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Home.png
     type: select
     filter: "(?!.*(Game))(美|States|US)"
     proxies: []
 
   # ------ 地区节点组 ------
   - name: 🇭🇰 HK
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Hong_Kong.png
     type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -289,6 +306,7 @@ proxy-groups:
     proxies: []
 
   - name: 🇸🇬 SG
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Singapore.png
     type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -297,6 +315,7 @@ proxy-groups:
     proxies: []
 
   - name: 🇼🇸 TW
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/China_Taipei.png
     type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -305,6 +324,7 @@ proxy-groups:
     proxies: []
 
   - name: 🇺🇲 US
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/USA.png
     type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -313,6 +333,7 @@ proxy-groups:
     proxies: []
 
   - name: 🇯🇵 JP
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Japan.png
     type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
