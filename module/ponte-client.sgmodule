@@ -1,0 +1,7 @@
+#!name=Ponte Client
+#!desc=Ponte 客户端：通过对应设备访问远程局域网
+#!category=Ponte
+
+[Rule]
+IP-CIDR,192.168.1.0/24,DEVICE:MINIS,no-resolve
+IP-CIDR,192.168.100.0/24,DEVICE:ROG,no-resolve
