@@ -4,4 +4,4 @@
 #!arguments=subnet=192.168.1.0/24
 
 [Rule]
-%INSERT% IP-CIDR,{{{subnet}}},DIRECT
+IP-CIDR,{{{subnet}}},DIRECT
