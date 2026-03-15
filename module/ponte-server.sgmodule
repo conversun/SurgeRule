@@ -1,7 +1,7 @@
 #!name=Ponte Server
 #!desc=Ponte 服务端：本地网段直连 (MINIS 填 192.168.1.0/24，ROG 填 192.168.100.0/24)
 #!category=Ponte
-#!arguments=subnet=192.168.1.0/24
+#!arguments=subnet:192.168.1.0/24
 
 [Rule]
 IP-CIDR,{{{subnet}}},DIRECT
