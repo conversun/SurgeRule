@@ -13,21 +13,31 @@ Multi-platform proxy configuration for iOS/macOS network traffic routing. Config
 ## File Structure
 
 ```
-Custom_Surge.conf          # Primary Surge configuration
-Custom_QX.conf             # Quantumult X configuration
-Custom_Clash.yaml          # Clash/mihomo configuration
-shadowrocket-social.conf   # Shadowrocket (social apps only)
-ssk.conf                   # Sukka ruleset reference template
-private/                   # Custom rule lists (referenced by RULE-SET URLs)
-  reject.list              #   Domains to block
-  direct.list              #   Domains to bypass proxy
+Custom_Surge.conf          # Primary Surge config (macOS/iOS)
+Custom_QX.conf             # Quantumult X config (iOS)
+Custom_Clash.yaml          # Clash/mihomo config (cross-platform)
+shadowrocket-social.conf   # Shadowrocket (social apps only — Instagram/TikTok/YouTube)
+ssk.conf                   # Sukka ruleset reference template (not deployed)
+private/                   # Custom rule lists (referenced via raw GitHub URLs)
+  reject.list              #   Domains to block (Parallels, etc.)
+  direct.list              #   Domains/processes to bypass proxy
   proxy.list               #   Domains to force proxy
-  ssh.list                 #   SSH port rules
-  ai.list                  #   AI service domains
+  ai.list                  #   AI service domains (Claude, Anthropic)
   apple.list               #   Apple-specific domains
-  tail.list                #   Tailscale/VPN network ranges
+  check.list               #   IP check & DNS leak test tools
 module/                    # Surge extension modules (.sgmodule)
+  custom-rules.sgmodule    #   Injects private/direct.list + private/proxy.list
+  ad-block.sgmodule        #   iOS ad blocking (REJECT-DROP)
+  ad-block-lite.sgmodule   #   macOS lite ad blocking
+  jpark.sgmodule           #   JParking domain blocks + API rejects
+  ponte-server.sgmodule    #   Ponte LAN direct (uses template arguments)
+  ponte-client.sgmodule    #   Ponte client config
+  private.sgmodule         #   MITM hostname additions
+  hide-qbittorrent.sgmodule #  Hide BT client traffic in Replica
+  lg.sgmodule              #   VIF excluded routes (LG ThinQ, casting)
 script/                    # Sub-Store proxy injection scripts (.js)
+  clash_proxy.js           #   Injects proxies into Custom_Clash.yaml
+  surge_proxy.js           #   Injects proxies into Surge (gitignored — contains secrets)
 docs/                      # Reference documentation
 ```
 
@@ -40,102 +50,91 @@ DOMAIN-KEYWORD,tracker                  # Match keyword in domain
 PROCESS-NAME,AppName                    # macOS process (case-sensitive)
 DEST-PORT,22                            # Destination port
 IP-CIDR,10.0.0.0/8,no-resolve          # IP range (add no-resolve for non-DNS)
-GEOIP,CN                                # GeoIP country
 AND,((DEST-PORT,22), (GEOIP, CN))       # Logical AND
-OR,((DOMAIN,a.com), (DOMAIN,b.com))     # Logical OR
 ```
 
-### When to Use Each Type
+Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matches, `PROCESS-NAME` for macOS app bypass. Always add `no-resolve` to IP-CIDR rules.
 
-| Situation | Type | Example |
-|-----------|------|---------|
-| Single exact domain | `DOMAIN` | `DOMAIN,app.plex.tv` |
-| Service with subdomains | `DOMAIN-SUFFIX` | `DOMAIN-SUFFIX,anthropic.com` |
-| macOS app bypass | `PROCESS-NAME` | `PROCESS-NAME,WeChat` |
-| Port-based routing | `DEST-PORT` | `DEST-PORT,22` |
-| VPN/internal ranges | `IP-CIDR` | `IP-CIDR,100.64.0.0/10,no-resolve` |
-
-## Configuration Sections (Surge .conf)
-
-INI-style sections, processed in this order:
-```
-[General]      # DNS, ports, timeouts, connectivity tests
-[Replica]      # Traffic hiding/filtering
-[Proxy]        # Server definitions (usually empty — imported from subscription)
-[Proxy Group]  # Policy groups for routing
-[Rule]         # Routing rules (ORDER MATTERS — first match wins)
-[Host]         # Custom DNS mappings
-[URL Rewrite]  # URL modification rules
-[Script]       # Script hooks
-[MITM]         # TLS interception config
-```
-
-## Rule Ordering (CRITICAL — first match wins)
-
-The `[Rule]` section in `Custom_Surge.conf` uses numbered section headers:
+## Rule Ordering in Custom_Surge.conf (first match wins)
 
 ```
-# ====== 1. 自定义规则 ======     → private/ lists (reject → direct → proxy → service)
-# ====== 2. 广告拦截 ======       → Ad blocking (skk.moe, AWAvenue)
-# ====== 3. 国内直连 ======       → China-direct (Apple CN, China Media, SteamCN)
-# ====== 4. AI ======             → AI services (Claude, OpenAI, skk.moe/ai)
-# ====== 5. 流媒体 ======         → Streaming (Netflix, TikTok, YouTube, GlobalMedia)
-# ====== 6. 服务 ======           → Services (Apple, GitHub, Telegram, Mail)
-# ====== 7. 金融 ======           → Finance (Crypto, PayPal, Stripe)
-# ====== 8. 工具 ======           → Tools (Speedtest)
-# ====== 9. CDN & 下载 ======     → CDN & downloads
-# ====== 10. 国内域名 ======      → Domestic domains (NeteaseMusic, domestic)
-# ====== 11. IP 规则 ======       → IP-based rules (Telegram IP, reject IP)
-# ====== 12. 兜底 ======          → Fallback (Proxy list, China, LAN, GEOIP CN, FINAL)
+# ====== 1. 国内直连 ======      → Apple/Microsoft CDN, ChinaMedia, SteamCN
+# ====== 2. AI ======             → AI services (skk.moe/ai ruleset)
+# ====== 3. 流媒体 ======        → Netflix, TikTok, YouTube, GlobalMedia
+# ====== 4. 服务 ======          → Mail, SSH(port 22), Apple, GitHub, Telegram, Google
+# ====== 5. 金融 ======          → Crypto, PayPal, Stripe
+# ====== 6. 工具 ======          → Speedtest, Check (IP/DNS leak tests)
+# ====== 7. CDN & 下载 ======    → CDN domainsets + download rules
+# ====== 8. 国内域名 ======      → China domestic domains
+# ====== 9. IP 规则 ======       → IP-based reject rules
+# ====== 10. 兜底 ======         → Proxy list, LAN, GEOIP CN, FINAL
 ```
 
-**New rules go in the appropriate numbered section.** Never append to the end.
+**New rules go in the appropriate numbered section.** Never append to the end. Ad blocking is handled by modules (`ad-block.sgmodule`), not the main conf.
 
-## Proxy Group Naming
+## Proxy Groups (policy names used in rules)
 
-- **Regions**: Emoji flag + code — `🇭🇰 HK`, `🇺🇲 US`, `🇼🇸 TW`, `🇸🇬 SG`, `🇯🇵 JP`
-- **Services**: English names — `AI`, `Media`, `TikTok`, `GitHub`, `Telegram`, `Tunnel`
-- **Finance**: English names — `Crypto`, `PayPal`, `Stripe`
-- **Tools**: English names — `Speed`
-- Region groups use `smart` policy with `policy-regex-filter` and `(?!.*(Game))` negative lookahead
+| Category | Groups |
+|----------|--------|
+| Main | `Proxy`, `Final` |
+| AI | `AI` |
+| Streaming | `Media`, `TikTok` |
+| Services | `Apple`, `GitHub`, `Google`, `Telegram`, `Tunnel` (mail+SSH) |
+| Finance | `Crypto`, `PayPal`, `Stripe` |
+| Tools | `Speed`, `Check`, `CDN` |
+| Special | `🏠 ISP` (US nodes via regex) |
+| Regions | `🇭🇰 HK`, `🇺🇲 US`, `🇼🇸 TW`, `🇸🇬 SG`, `🇯🇵 JP` |
 
-## Comment Conventions
+Region groups use `smart` policy with `policy-regex-filter` and `(?!.*(Game))` negative lookahead. New rules MUST use an existing group name — adding a group requires editing `[Proxy Group]`.
 
-- `#` for comments in `.list` and `.conf` files
-- `//` to disable a rule while keeping it for reference (in `.conf` only)
-- Chinese comments are standard: `# 广告拦截`, `# 兜底`
-- Section headers use: `# ====== N. 名称 ======`
-- Subsection comments use: `# --- 描述 ---`
-- Group related domains together; separate logical groups with blank lines
-- One rule per line, no inline comments after rules
+## Cross-Platform Naming
+
+| Surge | QX | Clash |
+|-------|-----|-------|
+| `Proxy` | `Outside` | `Proxy` |
+| `AI` | `AI Suite` | `AI` |
+| `Media` | `Global Media` | `Media` |
+| `Speed` | `Speedtest` | `Speedtest` |
+| `Tunnel` | `Mail` | `Tunnel` |
+
+When modifying routing logic, check if the same change is needed in all configs.
 
 ## Module Files (.sgmodule)
 
 ```
 #!name=Module Name
 #!desc=Description
-#!category=CategoryName    (optional)
+#!category=CategoryName
+#!arguments=subnet:192.168.1.0/24     # Template arguments (optional)
+
+[Rule]
+IP-CIDR,{{{subnet}}},DIRECT           # Use {{{var}}} for argument substitution
 
 [MITM]
-hostname = %APPEND% *.example.com     # Add to existing hostname list
+hostname = %APPEND% *.example.com     # %APPEND% adds to existing list
 ```
 
-Directives: `%APPEND%` adds to existing list, `%INSERT%` prepends. Always use these to avoid overwriting the main config's values.
+Directives: `%APPEND%` adds to existing list, `%INSERT%` prepends. Always use these — bare assignment overwrites the main config's values.
 
-## External Rule Sources
+## Script Conventions (Sub-Store)
 
-| Source | Usage |
-|--------|-------|
-| `ruleset.skk.moe` | Ad blocking, CDN, domestic, AI, streaming |
-| `blackmatrix7/ios_rule_script` | Service-specific rules (GitHub, Telegram, Netflix, etc.) |
-| `TG-Twilight/AWAvenue-Ads-Rule` | Additional ad blocking |
+`clash_proxy.js` uses Sub-Store's API:
+- `produceArtifact()` — fetch proxy collection
+- `ProxyUtils.parse(raw)` / `ProxyUtils.produce(proxies, platform)` — parse/serialize
+- `$content` — the target config file content (mutated in place)
 
-URL patterns for referencing:
-```
-https://raw.githubusercontent.com/conversun/SurgeRule/main/private/file.list
-https://cdn.jsdelivr.net/gh/user/repo@branch/path
-https://ruleset.skk.moe/List/non_ip/rule.conf
-```
+## Comment Conventions
+
+- `#` for comments in `.list` and `.conf` files
+- Chinese comments are standard: `# 广告拦截`, `# 兜底`
+- Section headers: `# ====== N. 名称 ======`
+- Subsection comments: `# --- 描述 ---`
+- Group related domains; separate logical groups with blank lines
+- One rule per line, no inline comments after rules
+
+## Commit Style
+
+Terse conventional commits: `feat: client`, `fix: arg`, `update`. No long descriptions needed.
 
 ## Common Tasks
 
@@ -144,32 +143,29 @@ Edit the appropriate `private/*.list` file. No config changes needed.
 
 ### Add a new service with its own policy
 1. Create `private/servicename.list` with domain rules
-2. Add policy group in `[Proxy Group]` section of `Custom_Surge.conf`
+2. Add policy group in `[Proxy Group]` of `Custom_Surge.conf`
 3. Add `RULE-SET` in `[Rule]` at the correct numbered section
-4. If multi-platform: replicate in `Custom_QX.conf` and `Custom_Clash.yaml`
+4. If multi-platform: replicate in `Custom_QX.conf` and `Custom_Clash.yaml` (different syntax)
 
 ### Block a domain
-Add to `private/reject.list`:
-```
-DOMAIN-SUFFIX,unwanted-service.com
-```
-
-### Cross-platform consistency
-When modifying routing logic, check if the same change is needed across:
-- `Custom_Surge.conf` (Surge)
-- `Custom_QX.conf` (Quantumult X) — uses different syntax for policies/filters
-- `Custom_Clash.yaml` (Clash) — YAML format, `rule-providers` + `rules` sections
-- `shadowrocket-social.conf` (Shadowrocket) — minimal, social-apps-only config
-
-### Scripts (Sub-Store)
-`script/clash_proxy.js` injects proxy nodes into `Custom_Clash.yaml` via Sub-Store. Uses `ProxyUtils` API. `script/surge_proxy.js` is gitignored (contains subscription secrets).
+Add to `private/reject.list`: `DOMAIN-SUFFIX,unwanted.com`
 
 ## Validation Checklist
 
 - [ ] Rule type spelled correctly (`DOMAIN-SUFFIX` not `DOMAIN-SURFIX`)
-- [ ] URLs accessible (test with curl)
+- [ ] Policy name matches an existing `[Proxy Group]` entry exactly
 - [ ] New rules in correct numbered section (not at EOF)
-- [ ] Policy name matches an existing `[Proxy Group]` entry
+- [ ] `extended-matching` flag on RULE-SET lines in Surge conf
 - [ ] No duplicate rules across `private/*.list` files
-- [ ] `extended-matching` flag included where needed in RULE-SET lines
+- [ ] URLs accessible (test with curl if uncertain)
 - [ ] For modules: `%APPEND%`/`%INSERT%` used (not bare assignment)
+- [ ] Clash rule-providers use correct `behavior` (classical/domain) and `format` (text/yaml)
+
+## External Rule Sources
+
+| Source | URL Pattern | Usage |
+|--------|-------------|-------|
+| skk.moe | `https://ruleset.skk.moe/List/non_ip/*.conf` | Ad blocking, CDN, AI, domestic |
+| blackmatrix7 | `https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/*.list` | Service-specific rules |
+| AWAvenue | `https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/*` | Additional ad blocking |
+| This repo | `https://raw.githubusercontent.com/conversun/SurgeRule/main/private/*.list` | Custom private rules |

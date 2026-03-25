@@ -618,6 +618,8 @@ rules:
   - RULE-SET,IP-Reject,REJECT
 
   # 11. 兜底
+  # CN2 GIA 直连
+  - IP-ASN,25820,DIRECT,no-resolve
   - RULE-SET,Proxy_Classical,Proxy
   - RULE-SET,LAN,DIRECT
   - GEOIP,CN,DIRECT
