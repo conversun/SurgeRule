@@ -1,0 +1,37 @@
+# CN2 GIA / CMIN2 / CU9929 三网精品网 VPS 服务商 ASN
+# 用途：海外 GIA 机器直连，不走代理
+# 维护：手动维护，按需增删
+
+# --- BandwagonHost / 搬瓦工 (IT7 Networks) ---
+IP-ASN,25820,no-resolve
+
+# --- DMIT ---
+IP-ASN,906,no-resolve
+IP-ASN,54574,no-resolve
+
+# --- GigsGigsCloud ---
+IP-ASN,134520,no-resolve
+
+# --- V.PS / xTom ---
+IP-ASN,3204,no-resolve
+
+# --- AkileCloud ---
+IP-ASN,61112,no-resolve
+
+# --- VMISS ---
+IP-ASN,400464,no-resolve
+
+# --- Kurun Cloud ---
+IP-ASN,395886,no-resolve
+
+# --- ZgoCloud ---
+IP-ASN,197767,no-resolve
+
+# --- DogYun / 狗云 ---
+IP-ASN,131483,no-resolve
+
+# --- BuyVM / FranTech ---
+IP-ASN,53667,no-resolve
+
+# --- Misaka / 三花猫 ---
+IP-ASN,917,no-resolve

@@ -29,4 +29,4 @@ PROCESS-NAME,cloudflared
 
 AND,((DEST-PORT,22), (GEOIP, CN))
 
-IP-ASN,25820,no-resolve
+
