@@ -1,0 +1,61 @@
+# --- 传统银行 ---
+
+# HSBC 汇丰
+DOMAIN-SUFFIX,hsbc.com.hk
+
+# Hang Seng Bank 恒生银行
+DOMAIN-SUFFIX,hangseng.com
+
+# BOCHK 中银香港
+DOMAIN-SUFFIX,bochk.com
+
+# Standard Chartered 渣打
+DOMAIN-SUFFIX,sc.com.hk
+
+# Citibank 花旗
+DOMAIN-SUFFIX,citibank.com.hk
+
+# DBS 星展
+DOMAIN-SUFFIX,dbs.com.hk
+
+# ICBC Asia 工银亚洲
+DOMAIN-SUFFIX,icbcasia.com
+
+# CCB Asia 建银亚洲
+DOMAIN-SUFFIX,ccbasia.com
+
+# Bank of East Asia 东亚银行
+DOMAIN-SUFFIX,bea.com.hk
+
+# Dah Sing Bank 大新银行
+DOMAIN-SUFFIX,dahsing.com
+
+# CITIC Bank International 信银国际
+DOMAIN-SUFFIX,cncbinternational.com
+
+# --- 虚拟银行 ---
+
+# ZA Bank 众安银行
+DOMAIN-SUFFIX,za.group
+DOMAIN-SUFFIX,zabank.com
+
+# Airstar Bank 天星银行
+DOMAIN-SUFFIX,airstarbank.com
+
+# Mox Bank
+DOMAIN-SUFFIX,mox.com
+
+# livi Bank 理慧银行
+DOMAIN-SUFFIX,livibank.com
+
+# WeLab Bank 汇立银行
+DOMAIN-SUFFIX,welab.bank
+
+# Fusion Bank 富融银行
+DOMAIN-SUFFIX,fusionbank.com
+
+# Ping An OneConnect Bank 平安壹账通银行
+DOMAIN-SUFFIX,paob.com.hk
+
+# Ant Bank 蚂蚁银行
+DOMAIN-SUFFIX,antbank.hk
