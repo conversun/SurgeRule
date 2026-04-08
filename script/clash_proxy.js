@@ -12,7 +12,7 @@ proxyYaml = proxyYaml.replace(/^proxies:\n?/m, '');
 $content = $content.replace(/^proxies:.*$/m, `proxies:\n${proxyYaml}`);
 
 // ===================== 识别 url-test 类型组（地区组）=====================
-const urlTestGroups = [...$content.matchAll(/- name: (.+)\n    type: url-test/g)].map((m) => m[1].trim());
+const urlTestGroups = [...$content.matchAll(/- name: (.+)\n(?:    .+\n)*?    type: url-test/g)].map((m) => m[1].trim());
 
 // ===================== url-test 组注入过滤后的节点 =====================
 $content = $content.replace(
@@ -28,7 +28,7 @@ $content = $content.replace(
 // ===================== select 组自动追加全部节点 =====================
 // 含地区组的 select 组才需要注入 allNames
 $content = $content.replace(
-  /(- name: .+\n    type: select\n    proxies:\n)((?:      - .+\n)+)/g,
+  /(- name: .+\n(?:    .+\n)*?    type: select\n    proxies:\n)((?:      - .+\n)+)/g,
   (block, header, membersBlock) => {
     const hasRegionGroup = urlTestGroups.some((g) => membersBlock.includes(g));
     if (hasRegionGroup) {
