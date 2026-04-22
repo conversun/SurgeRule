@@ -590,11 +590,10 @@ rules:
   # 3. AI 服务
   - RULE-SET,AI-SKK,AI
 
-  # 4. 流媒体
-  - RULE-SET,Netflix,Media
-  - RULE-SET,TikTok,TikTok
-  - RULE-SET,YouTube,Media
-  - RULE-SET,Global-Media,Media
+  # 4. 金融
+  - RULE-SET,Crypto,Crypto
+  - RULE-SET,PayPal,PayPal
+  - RULE-SET,Stripe,Stripe
 
   # 5. 服务
   - RULE-SET,Mail,Tunnel
@@ -604,10 +603,11 @@ rules:
   - RULE-SET,Telegram,Telegram
   - RULE-SET,Google,Google
 
-  # 6. 金融
-  - RULE-SET,Crypto,Crypto
-  - RULE-SET,PayPal,PayPal
-  - RULE-SET,Stripe,Stripe
+  # 6. 流媒体
+  - RULE-SET,Netflix,Media
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,YouTube,Media
+  - RULE-SET,Global-Media,Media
 
   # 7. 工具
   - RULE-SET,Speedtest,Speedtest
