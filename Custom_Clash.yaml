@@ -625,6 +625,14 @@ rule-providers:
     path: ./ruleset/IP-Domestic.txt
     interval: 172800
 
+  Alibaba-ASN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://raw.githubusercontent.com/conversun/SurgeRule/main/private/ali.list"
+    path: ./ruleset/Alibaba-ASN.txt
+    interval: 172800
+
   GIA:
     type: http
     behavior: classical
@@ -690,6 +698,7 @@ rules:
   - RULE-SET,IP-Reject,REJECT-DROP
   - RULE-SET,IP-LAN,DIRECT
   - RULE-SET,IP-Domestic,DIRECT
+  - RULE-SET,Alibaba-ASN,DIRECT
   - RULE-SET,GIA,DIRECT
   - GEOIP,CN,DIRECT,no-resolve
 

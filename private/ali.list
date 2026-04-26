@@ -1,0 +1,7 @@
+# 阿里巴巴海外 CDN ASN 直连
+# 用途：Taobao/Alipay 等国内 App 的 UDP/QUIC 流量直接打到阿里海外边缘 IP，
+#       没有 SNI 让 DOMAIN 规则无法匹配；GeoIP 又判 US/HK/SG，需要 IP-ASN 兜底。
+# 维护：手动维护，按需增删
+
+# Alibaba US Technology Co., Ltd. — 海外 CDN（HK/SG/JP/US 边缘节点）
+IP-ASN,45102,no-resolve
