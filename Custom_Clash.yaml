@@ -343,7 +343,7 @@ proxy-groups:
 
 # ====== 远程规则集 ======
 rule-providers:
-  # --- 广告拦截 ---
+  # --- 拦截层（广告/隐私/恶意/QUIC 噪音） ---
   AWAvenue-Ads:
     type: http
     behavior: domain
@@ -351,147 +351,53 @@ rule-providers:
     path: ./ruleset/AWAvenue-Ads.yaml
     interval: 172800
 
-  # --- 国内直连 ---
-  Apple-CDN:
+  Reject-Domainset:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://ruleset.skk.moe/Clash/domainset/reject.txt"
+    path: ./ruleset/Reject-Domainset.txt
+    interval: 172800
+
+  Reject-NonIP:
     type: http
     behavior: classical
     format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cdn.txt"
-    path: ./ruleset/Apple-CDN.txt
+    url: "https://ruleset.skk.moe/Clash/non_ip/reject.txt"
+    path: ./ruleset/Reject-NonIP.txt
     interval: 172800
 
-  Microsoft-CDN:
+  Reject-NoDrop:
     type: http
     behavior: classical
     format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt"
-    path: ./ruleset/Microsoft-CDN.txt
+    url: "https://ruleset.skk.moe/Clash/non_ip/reject-no-drop.txt"
+    path: ./ruleset/Reject-NoDrop.txt
     interval: 172800
 
-  Apple-CN:
+  Reject-Drop:
     type: http
     behavior: classical
     format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt"
-    path: ./ruleset/Apple-CN.txt
+    url: "https://ruleset.skk.moe/Clash/non_ip/reject-drop.txt"
+    path: ./ruleset/Reject-Drop.txt
     interval: 172800
 
-  China-Media:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/ChinaMedia/ChinaMedia.yaml"
-    path: ./ruleset/China-Media.yaml
-    interval: 172800
-
-  SteamCN:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/SteamCN/SteamCN.yaml"
-    path: ./ruleset/SteamCN.yaml
-    interval: 172800
-
-  # --- AI 服务 ---
-  AI-SKK:
+  Sogouinput:
     type: http
     behavior: classical
     format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/ai.txt"
-    path: ./ruleset/AI-SKK.txt
+    url: "https://ruleset.skk.moe/Clash/non_ip/sogouinput.txt"
+    path: ./ruleset/Sogouinput.txt
     interval: 172800
 
-  # --- 流媒体 ---
-  Netflix:
+  # --- 测速 / 工具 ---
+  Speedtest-Domainset:
     type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Netflix/Netflix.yaml"
-    path: ./ruleset/Netflix.yaml
-    interval: 172800
-
-  TikTok:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TikTok/TikTok.yaml"
-    path: ./ruleset/TikTok.yaml
-    interval: 172800
-
-  YouTube:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/YouTube/YouTube.yaml"
-    path: ./ruleset/YouTube.yaml
-    interval: 172800
-
-  Global-Media:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GlobalMedia/GlobalMedia.yaml"
-    path: ./ruleset/Global-Media.yaml
-    interval: 172800
-
-  # --- 服务 ---
-  AppleProxy:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/AppleProxy/AppleProxy.yaml"
-    path: ./ruleset/AppleProxy.yaml
-    interval: 172800
-
-  GitHub:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml"
-    path: ./ruleset/GitHub.yaml
-    interval: 172800
-
-  Google:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml"
-    path: ./ruleset/Google.yaml
-    interval: 172800
-
-  Telegram:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Telegram/Telegram.yaml"
-    path: ./ruleset/Telegram.yaml
-    interval: 172800
-
-  Mail:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Mail/Mail.yaml"
-    path: ./ruleset/Mail.yaml
-    interval: 172800
-
-  # --- 金融 ---
-  Crypto:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Crypto/Crypto.yaml"
-    path: ./ruleset/Crypto.yaml
-    interval: 172800
-
-  PayPal:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/PayPal/PayPal.yaml"
-    path: ./ruleset/PayPal.yaml
-    interval: 172800
-
-  Stripe:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Stripe/Stripe.yaml"
-    path: ./ruleset/Stripe.yaml
-    interval: 172800
-
-  # --- 工具 ---
-  Speedtest:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Speedtest/Speedtest.yaml"
-    path: ./ruleset/Speedtest.yaml
+    behavior: domain
+    format: text
+    url: "https://ruleset.skk.moe/Clash/domainset/speedtest.txt"
+    path: ./ruleset/Speedtest-Domainset.txt
     interval: 172800
 
   Check:
@@ -500,6 +406,15 @@ rule-providers:
     format: text
     url: "https://raw.githubusercontent.com/conversun/SurgeRule/main/private/check.list"
     path: ./ruleset/Check.list
+    interval: 172800
+
+  # --- AI ---
+  AI-SKK:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/ai.txt"
+    path: ./ruleset/AI-SKK.txt
     interval: 172800
 
   # --- CDN & 下载 ---
@@ -535,21 +450,179 @@ rule-providers:
     path: ./ruleset/Download-NonIP.txt
     interval: 172800
 
-  # --- 国内域名 ---
-  China_Classical:
+  # --- 金融 ---
+  HKBank:
     type: http
     behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Classical.yaml"
-    path: ./ruleset/China_Classical.yaml
+    format: text
+    url: "https://raw.githubusercontent.com/conversun/SurgeRule/main/private/hkbank.list"
+    path: ./ruleset/HKBank.list
     interval: 172800
 
-  # --- IP 规则 ---
+  Crypto:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Crypto/Crypto.yaml"
+    path: ./ruleset/Crypto.yaml
+    interval: 172800
+
+  PayPal:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/PayPal/PayPal.yaml"
+    path: ./ruleset/PayPal.yaml
+    interval: 172800
+
+  Stripe:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Stripe/Stripe.yaml"
+    path: ./ruleset/Stripe.yaml
+    interval: 172800
+
+  # --- 流媒体 ---
+  TikTok:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/TikTok/TikTok.yaml"
+    path: ./ruleset/TikTok.yaml
+    interval: 172800
+
+  Stream:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/stream.txt"
+    path: ./ruleset/Stream.txt
+    interval: 172800
+
+  # --- 服务 ---
+  Telegram-NonIP:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/telegram.txt"
+    path: ./ruleset/Telegram-NonIP.txt
+    interval: 172800
+
+  Apple-CDN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cdn.txt"
+    path: ./ruleset/Apple-CDN.txt
+    interval: 172800
+
+  Microsoft-CDN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt"
+    path: ./ruleset/Microsoft-CDN.txt
+    interval: 172800
+
+  Apple-CN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt"
+    path: ./ruleset/Apple-CN.txt
+    interval: 172800
+
+  Apple-Services:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/apple_services.txt"
+    path: ./ruleset/Apple-Services.txt
+    interval: 172800
+
+  Microsoft-NonIP:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/microsoft.txt"
+    path: ./ruleset/Microsoft-NonIP.txt
+    interval: 172800
+
+  Mail:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Mail/Mail.yaml"
+    path: ./ruleset/Mail.yaml
+    interval: 172800
+
+  GitHub:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/GitHub/GitHub.yaml"
+    path: ./ruleset/GitHub.yaml
+    interval: 172800
+
+  Google:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Google/Google.yaml"
+    path: ./ruleset/Google.yaml
+    interval: 172800
+
+  # --- 海外常见域名（避免本地 DNS 解析） ---
+  Global:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/global.txt"
+    path: ./ruleset/Global.txt
+    interval: 172800
+
+  # --- 国内常见域名 ---
+  Domestic:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/domestic.txt"
+    path: ./ruleset/Domestic.txt
+    interval: 172800
+
+  Direct:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/direct.txt"
+    path: ./ruleset/Direct.txt
+    interval: 172800
+
+  LAN-NonIP:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/non_ip/lan.txt"
+    path: ./ruleset/LAN-NonIP.txt
+    interval: 172800
+
+  # --- IP 规则（此后才会触发本地 DNS 解析） ---
   IP-Reject:
     type: http
     behavior: classical
     format: text
     url: "https://ruleset.skk.moe/Clash/ip/reject.txt"
     path: ./ruleset/IP-Reject.txt
+    interval: 172800
+
+  IP-LAN:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/ip/lan.txt"
+    path: ./ruleset/IP-LAN.txt
+    interval: 172800
+
+  IP-Domestic:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://ruleset.skk.moe/Clash/ip/domestic.txt"
+    path: ./ruleset/IP-Domestic.txt
     interval: 172800
 
   GIA:
@@ -560,74 +633,65 @@ rule-providers:
     path: ./ruleset/GIA.txt
     interval: 172800
 
-  # --- 兜底 ---
-  Proxy_Classical:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Proxy/Proxy_Classical.yaml"
-    path: ./ruleset/Proxy_Classical.yaml
-    interval: 172800
-
-  LAN:
-    type: http
-    behavior: classical
-    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Lan/Lan.yaml"
-    path: ./ruleset/LAN.yaml
-    interval: 172800
-
 # ====== 分流规则 ======
 rules:
-  # 1. 广告拦截
+  # 0. 拦截层（广告/隐私/恶意/QUIC 噪音）
   - RULE-SET,AWAvenue-Ads,REJECT
+  - RULE-SET,Sogouinput,REJECT-DROP
+  - RULE-SET,Reject-Domainset,REJECT
+  - RULE-SET,Reject-NonIP,REJECT
+  - RULE-SET,Reject-NoDrop,REJECT-DROP
+  - RULE-SET,Reject-Drop,REJECT-DROP
 
-  # 2. 国内直连（防止被后续代理规则误匹配）
-  - RULE-SET,Apple-CDN,DIRECT
-  - RULE-SET,Microsoft-CDN,DIRECT
-  - RULE-SET,Apple-CN,DIRECT
-  - RULE-SET,China-Media,DIRECT
-  - RULE-SET,SteamCN,DIRECT
-
-  # 3. AI 服务
-  - RULE-SET,AI-SKK,AI
-
-  # 4. 金融
-  - RULE-SET,Crypto,Crypto
-  - RULE-SET,PayPal,PayPal
-  - RULE-SET,Stripe,Stripe
-
-  # 5. 服务
-  - RULE-SET,Mail,Tunnel
-  - DST-PORT,22,Tunnel
-  - RULE-SET,AppleProxy,Apple
-  - RULE-SET,GitHub,GitHub
-  - RULE-SET,Telegram,Telegram
-  - RULE-SET,Google,Google
-
-  # 6. 流媒体
-  - RULE-SET,Netflix,Media
-  - RULE-SET,TikTok,TikTok
-  - RULE-SET,YouTube,Media
-  - RULE-SET,Global-Media,Media
-
-  # 7. 工具
-  - RULE-SET,Speedtest,Speedtest
+  # 1. 测速 / 工具
+  - RULE-SET,Speedtest-Domainset,Speedtest
   - RULE-SET,Check,Check
 
-  # 8. CDN & 下载
+  # 2. AI
+  - RULE-SET,AI-SKK,AI
+
+  # 3. CDN & 下载
   - RULE-SET,CDN-Domainset,CDN
   - RULE-SET,CDN-NonIP,CDN
   - RULE-SET,Download-Domainset,CDN
   - RULE-SET,Download-NonIP,CDN
 
-  # 9. 国内域名
-  - RULE-SET,China_Classical,DIRECT
+  # 4. 金融
+  - RULE-SET,HKBank,DIRECT
+  - RULE-SET,Crypto,Crypto
+  - RULE-SET,PayPal,PayPal
+  - RULE-SET,Stripe,Stripe
 
-  # 10. IP 规则
-  - RULE-SET,IP-Reject,REJECT
+  # 5. 流媒体
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,Stream,Media
 
-  # 11. 兜底
+  # 6. 服务
+  - RULE-SET,Telegram-NonIP,Telegram
+  - RULE-SET,Apple-CDN,DIRECT
+  - RULE-SET,Microsoft-CDN,DIRECT
+  - RULE-SET,Apple-CN,DIRECT
+  - RULE-SET,Apple-Services,Apple
+  - RULE-SET,Microsoft-NonIP,Proxy
+  - RULE-SET,Mail,Tunnel
+  - DST-PORT,22,Tunnel
+  - RULE-SET,GitHub,GitHub
+  - RULE-SET,Google,Google
+
+  # 7. 海外常见域名（避免本地 DNS 解析）
+  - RULE-SET,Global,Proxy
+
+  # 8. 国内常见域名
+  - RULE-SET,Domestic,DIRECT
+  - RULE-SET,Direct,DIRECT
+  - RULE-SET,LAN-NonIP,DIRECT
+
+  # 9. IP 规则（此后才会触发本地 DNS 解析）
+  - RULE-SET,IP-Reject,REJECT-DROP
+  - RULE-SET,IP-LAN,DIRECT
+  - RULE-SET,IP-Domestic,DIRECT
   - RULE-SET,GIA,DIRECT
-  - RULE-SET,Proxy_Classical,Proxy
-  - RULE-SET,LAN,DIRECT
-  - GEOIP,CN,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+
+  # 10. 兜底
   - MATCH,Final
