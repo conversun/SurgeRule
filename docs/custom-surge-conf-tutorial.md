@@ -45,7 +45,7 @@ always-real-ip = *.srv.nintendo.net, *.stun.playstation.net, stun.*, ...
 geoip-maxmind-url = https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb
 ```
 
-使用 Loyalsoldier 维护的精简版 GeoIP 数据库（仅中国 + 内网），体积小、更新频繁。配合末尾的 `GEOIP,CN,DIRECT` 规则，实现兜底的国内直连判断。
+使用 Loyalsoldier 维护的精简版 GeoIP 数据库（仅中国 + 内网），体积小、更新频繁。当前主配置优先使用 skk.moe 的 `ip/china_ip.conf` 和 `ip/domestic.conf` 做国内 IP 兜底，减少对单一 GeoIP 规则的依赖。
 
 ### 跳过代理
 
@@ -139,16 +139,16 @@ Surge 规则采用 **"先匹配先生效"** 原则，顺序至关重要。本配
  ┌─────────────────────────────────────┐
  │ (Module pre-matching: 广告拦截)     │  ← 模块注入，最先执行
  ├─────────────────────────────────────┤
- │ 1. 国内直连  (Apple CDN, 国内媒体)  │  ← 国内服务快速放行
- │ 2. AI       (Claude, OpenAI 等)    │
- │ 3. 流媒体    (Netflix, YouTube)     │
- │ 4. 服务      (GitHub, Telegram)     │
- │ 5. 金融      (Crypto, PayPal)       │
- │ 6. 工具      (Speedtest)            │
- │ 7. CDN & 下载                       │
- │ 8. 国内域名   (China 全量列表)       │
- │ 9. IP 规则    (Telegram IP, 广告 IP) │
- │10. 兜底       (GEOIP CN, FINAL)     │
+│ 1. 测速 / 工具 (Speedtest, Check)   │
+│ 2. AI        (Claude, OpenAI 等)    │
+│ 3. CDN & 下载                       │
+│ 4. 金融       (Crypto, PayPal)      │  ← 位于流媒体前，避免误分流
+│ 5. 流媒体     (TikTok, Stream)      │
+│ 6. 服务       (GitHub, Telegram)    │
+│ 7. 海外常见域名 (global.conf)        │  ← 防止已知海外域名本地解析
+│ 8. 国内常见域名 (domestic/direct)    │
+│ 9. IP 规则     (LAN, 国内 IP, GIA)  │
+│10. 兜底        (FINAL)              │
  ├─────────────────────────────────────┤
  │ (Module: custom-rules 自定义规则)    │  ← 模块注入的普通规则
  └─────────────────────────────────────┘
@@ -157,12 +157,13 @@ Surge 规则采用 **"先匹配先生效"** 原则，顺序至关重要。本配
 
 ### 设计逻辑
 
-1. **国内直连最先**：Apple/Microsoft CDN、国内媒体等高频流量立即放行，减少不必要的规则匹配
-2. **服务分流在中间**：AI、流媒体、金融等需要指定出口的服务精确匹配
-3. **CDN 和下载统一走代理**：海外 CDN 和软件下载通常需要代理加速
-4. **国内域名兜底**：使用 blackmatrix7 的 `China_All_No_Resolve` 大规则集，覆盖绝大多数国内域名
-5. **IP 兜底**：`GEOIP,CN,DIRECT` 确保没匹配到域名规则的国内 IP 仍然直连
-6. **FINAL 兜底**：所有未匹配的流量走 `Proxy`，`dns-failed` 表示 DNS 解析失败的也走代理（防止被污染的域名无法访问）
+1. **工具类先匹配**：Speedtest 和检查工具优先进入专用策略组，避免被后续 CDN 或 global 规则误吞
+2. **AI 精确分流**：生成式 AI 服务使用独立策略组，方便按地区或节点质量单独调整
+3. **CDN 和下载前置**：静态资源和下载流量占比高，尽早匹配可减少后续规则开销
+4. **金融位于流媒体前**：避免流媒体或 CDN 规则误吞 Stripe、PayPal 等金融相关域名
+5. **海外域名优先用 non_ip 兜底**：`global.conf` 放在 IP 规则之前，减少已知海外域名在本地解析造成的 DNS 泄漏
+6. **国内域名与 IP 分层兜底**：使用 skk.moe 的 `domestic.conf` / `direct.conf` / `china_ip.conf`，再配合 GIA ASN 列表处理特殊直连场景
+7. **FINAL 兜底**：所有未匹配流量进入 `Final` 策略组，`dns-failed` 表示 DNS 解析失败时也交给最终策略处理
 
 ### 关键规则说明
 
@@ -173,10 +174,10 @@ PROCESS-NAME,Telegram,REJECT-DROP
 这条规则位于 `RULE-SET,https://...telegram.conf,Telegram`（IP 规则）之后。作用：Telegram 的 IP 段流量已被 IP 规则集捕获并走 `Telegram` 策略；如果有任何漏网的 Telegram 进程流量（如直连尝试），直接丢弃，防止真实 IP 泄露。
 
 ```ini
-FINAL,Proxy,dns-failed
+FINAL,Final,dns-failed
 ```
 
-终极兜底：所有未被任何规则匹配的流量走代理。`dns-failed` 参数表示 DNS 解析失败时也交给代理处理（由远端 DNS 解析），这对于被 DNS 污染的域名至关重要。
+终极兜底：所有未被任何规则匹配的流量进入 `Final` 策略组。`dns-failed` 参数表示 DNS 解析失败时也交给最终策略处理，这对于被 DNS 污染的域名至关重要。
 
 ---
 
@@ -374,7 +375,7 @@ hostname = %APPEND% *.local, *.instagram.com, ...
   ├─ pre-matching 规则（广告模块）→ 不是广告域名，继续
   │
   ├─ [Rule] 主配置规则按顺序匹配：
-  │   ├─ 1. 国内直连？→ 不匹配
+  │   ├─ 1. 测速 / 工具？→ 不匹配
   │   ├─ 2. AI？→ skk.moe/ai.conf 命中！→ 策略 = AI
   │   └─ (后续规则不再评估)
   │
@@ -404,5 +405,5 @@ hostname = %APPEND% *.local, *.instagram.com, ...
 本配置依赖的外部规则集均通过 CDN URL 引用，由上游维护者更新。Surge 会定期自动刷新。主要来源：
 
 - **[Sukka (skk.moe)](https://blog.skk.moe/post/i-have-my-unique-surge-setup/)**：广告拦截、CDN、AI、国内域名等
-- **[blackmatrix7](https://github.com/blackmatrix7/ios_rule_script)**：各服务专用规则（Netflix、GitHub、Telegram 等）
+- **[blackmatrix7](https://github.com/blackmatrix7/ios_rule_script)**：各服务专用规则（GitHub、Google、金融、TikTok 等）
 - **[AWAvenue](https://github.com/TG-Twilight/AWAvenue-Ads-Rule)**：国内广告规则补充

@@ -17,6 +17,7 @@ Custom_Surge.conf          # Primary Surge config (macOS/iOS)
 Custom_QX.conf             # Quantumult X config (iOS)
 Custom_Clash.yaml          # Clash/mihomo config (cross-platform)
 shadowrocket-social.conf   # Shadowrocket (social apps only — Instagram/TikTok/YouTube)
+shadowrocket-proxy.conf    # Shadowrocket (GFW proxy list — broader coverage)
 ssk.conf                   # Sukka ruleset reference template (not deployed)
 private/                   # Custom rule lists (referenced via raw GitHub URLs)
   reject.list              #   Domains to block (Parallels, etc.)
@@ -25,11 +26,14 @@ private/                   # Custom rule lists (referenced via raw GitHub URLs)
   ai.list                  #   AI service domains (Claude, Anthropic)
   apple.list               #   Apple-specific domains
   check.list               #   IP check & DNS leak test tools
+  hkbank.list              #   Hong Kong banking domains (traditional + virtual banks)
+  gia.list                 #   CN2 GIA / CMIN2 / CU9929 VPS ASNs (direct, no proxy)
 module/                    # Surge extension modules (.sgmodule)
   custom-rules.sgmodule    #   Injects private/direct.list + private/proxy.list
   ad-block.sgmodule        #   iOS ad blocking (REJECT-DROP)
   ad-block-lite.sgmodule   #   macOS lite ad blocking
   jpark.sgmodule           #   JParking domain blocks + API rejects
+  jpark-qx.conf            #   JParking rules for Quantumult X
   ponte-server.sgmodule    #   Ponte LAN direct (uses template arguments)
   ponte-client.sgmodule    #   Ponte client config
   private.sgmodule         #   MITM hostname additions
@@ -37,7 +41,7 @@ module/                    # Surge extension modules (.sgmodule)
   lg.sgmodule              #   VIF excluded routes (LG ThinQ, casting)
 script/                    # Sub-Store proxy injection scripts (.js)
   clash_proxy.js           #   Injects proxies into Custom_Clash.yaml
-  surge_proxy.js           #   Injects proxies into Surge (gitignored — contains secrets)
+  surge_proxy.js           #   Injects proxies into Surge (untracked — contains secrets)
 docs/                      # Reference documentation
 ```
 
@@ -50,24 +54,25 @@ DOMAIN-KEYWORD,tracker                  # Match keyword in domain
 PROCESS-NAME,AppName                    # macOS process (case-sensitive)
 DEST-PORT,22                            # Destination port
 IP-CIDR,10.0.0.0/8,no-resolve          # IP range (add no-resolve for non-DNS)
+IP-ASN,12345,no-resolve                 # Match by AS number (always add no-resolve)
 AND,((DEST-PORT,22), (GEOIP, CN))       # Logical AND
 ```
 
-Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matches, `PROCESS-NAME` for macOS app bypass. Always add `no-resolve` to IP-CIDR rules.
+Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matches, `PROCESS-NAME` for macOS app bypass. Always add `no-resolve` to IP-CIDR and IP-ASN rules.
 
 ## Rule Ordering in Custom_Surge.conf (first match wins)
 
 ```
-# ====== 1. 国内直连 ======      → Apple/Microsoft CDN, ChinaMedia, SteamCN
-# ====== 2. AI ======             → AI services (skk.moe/ai ruleset)
-# ====== 3. 流媒体 ======        → Netflix, TikTok, YouTube, GlobalMedia
-# ====== 4. 服务 ======          → Mail, SSH(port 22), Apple, GitHub, Telegram, Google
-# ====== 5. 金融 ======          → Crypto, PayPal, Stripe
-# ====== 6. 工具 ======          → Speedtest, Check (IP/DNS leak tests)
-# ====== 7. CDN & 下载 ======    → CDN domainsets + download rules
-# ====== 8. 国内域名 ======      → China domestic domains
-# ====== 9. IP 规则 ======       → IP-based reject rules
-# ====== 10. 兜底 ======         → Proxy list, LAN, GEOIP CN, FINAL
+# ====== 1. 测速 / 工具 ======              → Speedtest, Check (IP/DNS leak tests)
+# ====== 2. AI ======                       → AI services (skk.moe/ai ruleset)
+# ====== 3. CDN & 下载 ======               → CDN domainsets + download rules
+# ====== 4. 金融 ======                     → Crypto, PayPal, Stripe
+# ====== 5. 流媒体 ======                   → TikTok, skk.moe stream ruleset
+# ====== 6. 服务 ======                     → Telegram, Apple, Microsoft, Mail/SSH, GitHub, Google
+# ====== 7. 海外常见域名 ======             → skk.moe global ruleset (avoid local DNS for known global domains)
+# ====== 8. 国内常见域名 ======             → skk.moe domestic/direct/lan rulesets
+# ====== 9. IP 规则 ======                  → reject/lan/domestic/china_ip/GIA IP rules
+# ====== 10. 兜底 ======                    → FINAL,Final,dns-failed
 ```
 
 **New rules go in the appropriate numbered section.** Never append to the end. Ad blocking is handled by modules (`ad-block.sgmodule`), not the main conf.
@@ -160,6 +165,7 @@ Add to `private/reject.list`: `DOMAIN-SUFFIX,unwanted.com`
 - [ ] URLs accessible (test with curl if uncertain)
 - [ ] For modules: `%APPEND%`/`%INSERT%` used (not bare assignment)
 - [ ] Clash rule-providers use correct `behavior` (classical/domain) and `format` (text/yaml)
+- [ ] `no-resolve` on all IP-CIDR and IP-ASN rules
 
 ## External Rule Sources
 
