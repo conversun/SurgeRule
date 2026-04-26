@@ -7,6 +7,10 @@ DOMAIN-SUFFIX,quickconnect.to
 DOMAIN-SUFFIX,conver.cc
 DOMAIN-SUFFIX,ilce.alicdn.com
 DOMAIN-SUFFIX,wxs.qq.com
+
+# --- 阿里 / 淘宝 CDN（GeoIP 误判 HK）---
+# alikunlun/tbcdn/mmstat 已包含在 skk.moe non_ip/domestic.conf，仅保留 cloud-nodes.com
+DOMAIN-SUFFIX,cloud-nodes.com
 DOMAIN-SUFFIX,atianqi.com
 DOMAIN-SUFFIX,pingpongx.com
 DOMAIN-SUFFIX,spdb.com.cn
