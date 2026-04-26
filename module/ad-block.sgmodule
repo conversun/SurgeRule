@@ -1,5 +1,5 @@
 #!name=Ad Block (iOS)
-#!desc=广告拦截 - iOS 适配，使用 REJECT-DROP 省电
+#!desc=广告拦截, 适用iOS
 #!category=Ad Block
 
 [Rule]
