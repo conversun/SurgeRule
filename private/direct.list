@@ -8,10 +8,6 @@ DOMAIN-SUFFIX,conver.cc
 DOMAIN-SUFFIX,ilce.alicdn.com
 DOMAIN-SUFFIX,wxs.qq.com
 
-# --- 阿里 / 淘宝 CDN ---
-# DOMAIN 规则只对 TCP+SNI 有效；UDP/QUIC 走原始 IP，需要 IP-ASN 兑底
-DOMAIN-SUFFIX,cloud-nodes.com
-IP-ASN,45102,no-resolve              # Alibaba US Technology（海外 CDN：HK/SG/JP/US 节点，Taobao/Alipay）
 DOMAIN-SUFFIX,atianqi.com
 DOMAIN-SUFFIX,pingpongx.com
 DOMAIN-SUFFIX,spdb.com.cn

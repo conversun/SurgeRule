@@ -28,6 +28,7 @@ private/                   # Custom rule lists (referenced via raw GitHub URLs)
   check.list               #   IP check & DNS leak test tools
   hkbank.list              #   Hong Kong banking domains (traditional + virtual banks)
   gia.list                 #   CN2 GIA / CMIN2 / CU9929 VPS ASNs (direct, no proxy)
+  ali.list                 #   Alibaba US ASN (direct overseas CDN for Taobao/Alipay)
 module/                    # Surge extension modules (.sgmodule)
   custom-rules.sgmodule    #   Injects private/direct.list + private/proxy.list
   ad-block.sgmodule        #   iOS ad blocking (REJECT-DROP)
