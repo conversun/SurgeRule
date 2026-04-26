@@ -25,7 +25,7 @@ AND,((DEST-PORT,22), (GEOIP,CN)) # Logical combination
 
 `Custom.conf` references remote rule sets via `RULE-SET` directives:
 ```
-RULE-SET,https://raw.githubusercontent.com/conversun/SurgeRule/main/proxy.list,Proxy,extended-matching
+RULE-SET,https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/proxy.list,Proxy,extended-matching
 ```
 
 **Rule Processing Order** (in `[Rule]` section):

@@ -175,4 +175,4 @@ Add to `private/reject.list`: `DOMAIN-SUFFIX,unwanted.com`
 | skk.moe | `https://ruleset.skk.moe/List/non_ip/*.conf` | Ad blocking, CDN, AI, domestic |
 | blackmatrix7 | `https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Surge/*.list` | Service-specific rules |
 | AWAvenue | `https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/*` | Additional ad blocking |
-| This repo | `https://raw.githubusercontent.com/conversun/SurgeRule/main/private/*.list` | Custom private rules |
+| This repo | `https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/*.list` | Custom private rules |
