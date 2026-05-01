@@ -120,7 +120,7 @@ IP-CIDR,{{{subnet}}},DIRECT           # Use {{{var}}} for argument substitution
 hostname = %APPEND% *.example.com     # %APPEND% adds to existing list
 ```
 
-Directives: `%APPEND%` adds to existing list, `%INSERT%` prepends. Always use these — bare assignment overwrites the main config's values.
+Directives `%APPEND%` / `%INSERT%` apply **only** to `key = value` fields (`[General]`, `[MITM]` `hostname`/`skip-server-cert-verify`/`tcp-connection`, `[WireGuard *]` keys) — without them, bare assignment overwrites the main config's values. **List sections** (`[Rule]`, `[Script]`, `[URL Rewrite]`, `[Header Rewrite]`, `[Host]`) do NOT support these directives — module entries are auto-prepended to the top of the main config's corresponding section ([source](https://manual.nssurge.com/others/module.html)).
 
 ## Script Conventions (Sub-Store)
 
@@ -164,7 +164,7 @@ Add to `private/reject.list`: `DOMAIN-SUFFIX,unwanted.com`
 - [ ] `extended-matching` flag on RULE-SET lines in Surge conf
 - [ ] No duplicate rules across `private/*.list` files
 - [ ] URLs accessible (test with curl if uncertain)
-- [ ] For modules: `%APPEND%`/`%INSERT%` used (not bare assignment)
+- [ ] For modules: `%APPEND%`/`%INSERT%` used on `key = value` fields in `[General]`/`[MITM]`/`[WireGuard *]` (not on `[Rule]` and other list sections — those are auto-prepended)
 - [ ] Clash rule-providers use correct `behavior` (classical/domain) and `format` (text/yaml)
 - [ ] `no-resolve` on all IP-CIDR and IP-ASN rules
 
