@@ -18,6 +18,11 @@ DOMAIN-SUFFIX,pcbeta.com
 DOMAIN-SUFFIX,juejin.cn
 DOMAIN-SUFFIX,gia.jd.com
 
+DOMAIN,smart.uhdnow.com
+DOMAIN,smart2.uhdnow.com
+DOMAIN,mlc.once.im
+DOMAIN,aaa.204cloud.com
+
 PROCESS-NAME,WeChat
 PROCESS-NAME,Feishu
 PROCESS-NAME,QQMusic
