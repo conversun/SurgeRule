@@ -361,7 +361,7 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Home.png
     type: select
     filter: "(?!.*(Game))(美|States|US)"
-    proxies: []
+    proxies: [DIRECT]
 
   # ------ 地区节点组 ------
   - name: 🇭🇰 HK
@@ -371,7 +371,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     filter: "(?!.*(Game))(港|Hong|HK)"
-    proxies: []
+    proxies: [DIRECT]
 
   - name: 🇸🇬 SG
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Singapore.png
@@ -380,7 +380,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     filter: "(?!.*(Game))(新|Singapore|SG)"
-    proxies: []
+    proxies: [DIRECT]
 
   - name: 🇼🇸 TW
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/China_Taipei.png
@@ -389,7 +389,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     filter: "(?!.*(Game))(台|Tai|TW)"
-    proxies: []
+    proxies: [DIRECT]
 
   - name: 🇺🇲 US
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/USA.png
@@ -398,7 +398,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     filter: "(?!.*(Game))(美|States|US)"
-    proxies: []
+    proxies: [DIRECT]
 
   - name: 🇯🇵 JP
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Japan.png
@@ -407,7 +407,7 @@ proxy-groups:
     interval: 300
     tolerance: 50
     filter: "(?!.*(Game))(日|Japan|JP)"
-    proxies: []
+    proxies: [DIRECT]
 
 # ====== 远程规则集 ======
 rule-providers:
