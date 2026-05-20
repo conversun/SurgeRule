@@ -102,6 +102,47 @@ dns:
     - 'time.*.edu.cn'
     - '+.ntp.org.cn'
 
+# ====== TUN ======
+# 透明代理 / 网关旁路由 (mihomo on Linux/Win, Clash Meta on Android)
+# Mac Surge / iOS Stash 各有自带 TUN 实现, 不读这段
+# 启用 TUN 需要管理员权限 + /dev/net/tun (Linux)
+tun:
+  enable: true
+  device: Meta
+  stack: mixed                 # system | gvisor | mixed
+  auto-route: true             # 自动加路由表, 把流量送入 TUN
+  auto-redirect: true          # Linux: 用 nftables 接管 forwarded 流量 (网关模式必需)
+  auto-detect-interface: true  # 自动跟随默认网卡
+  strict-route: false          # 不强制覆盖, 本地优先级路由生效
+  mtu: 1500
+  dns-hijack:
+    - 'any:53'                 # 任何到 :53 的流量都给 mihomo DNS
+  inet4-route-exclude-address:
+    - 192.168.0.0/16           # LAN
+    - 10.0.0.0/8
+    - 172.16.0.0/12            # 含 Docker bridge
+    - 169.254.0.0/16           # link-local
+    # 注意: 不要排除 198.18.0.0/16, fake-ip 段必须由 TUN 接管
+
+# ====== Sniffer ======
+# 从 TLS Client Hello / HTTP Host 嗅出域名, 恢复 fake-ip / 直连 IP 场景下丢失的域名
+# 让 RULE-SET 在透明代理下也能精准匹配, 不再 fallthrough 到 MATCH/Final
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080, 8880]
+      override-destination: true
+    QUIC:
+      ports: [443, 8443]
+  parse-pure-ip: true          # 纯 IP 连接也尝试嗅探
+  override-destination: true   # 嗅到域名后, 用域名重匹配规则
+  skip-domain:
+    - '+.apple.com'            # Apple 服务对嗅探敏感, 跳过
+    - '+.icloud.com'
+
 proxies: # {{proxies}}
 
 # ====== 策略组 ======
