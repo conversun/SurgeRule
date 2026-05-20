@@ -6,7 +6,7 @@ allow-lan: true
 bind-address: "*"
 mode: rule
 log-level: info
-ipv6: false
+ipv6: true
 external-controller: 127.0.0.1:9090
 unified-delay: true
 tcp-concurrent: true
@@ -33,7 +33,7 @@ dns:
   cache-algorithm: arc
   prefer-h3: false
   listen: 0.0.0.0:1053
-  ipv6: false
+  ipv6: true
   respect-rules: true
   use-hosts: true
   use-system-hosts: true
@@ -74,6 +74,33 @@ dns:
     - 'time.apple.com'
     - '+.pool.ntp.org'
     - '+.stun.*'
+    # --- 微软网络检测 ---
+    - 'dns.msftncsi.com'
+    - '+.msftconnecttest.com'
+    - '+.msftncsi.com'
+    # --- 游戏主机 ---
+    - '+.srv.nintendo.net'
+    - '+.stun.playstation.net'
+    - 'xbox.*.microsoft.com'
+    - '+.xboxlive.com'
+    # --- VoIP STUN/TURN ---
+    - '+.turn.twilio.com'
+    - '+.stun.twilio.com'
+    - 'stun.syncthing.net'
+    # --- 战网 ---
+    - '+.logon.battlenet.com.cn'
+    - '+.logon.battle.net'
+    - '+.blzstatic.cn'
+    # --- 系统连通性探测 ---
+    - 'network-test.debian.org'
+    - 'detectportal.firefox.com'
+    - 'resolver1.opendns.com'
+    # --- NTP ---
+    - 'ntp.*.com'
+    - 'time.*.com'
+    - 'time.*.gov'
+    - 'time.*.edu.cn'
+    - '+.ntp.org.cn'
 
 proxies: # {{proxies}}
 
