@@ -16,10 +16,12 @@ const urlTestGroups = [...$content.matchAll(/- name: (.+)\n(?:    .+\n)*?    typ
 
 // ===================== url-test 组注入过滤后的节点 =====================
 $content = $content.replace(
-  /    filter: "(.+)"\n    proxies: \[\]/g,
-  (_, filterStr) => {
+  /    filter: "(.+)"\n    proxies: \[(?:DIRECT)?\]/g,
+  (block, filterStr) => {
     const regex = new RegExp(filterStr);
     const names = allNames.filter((n) => regex.test(n));
+    // filter 无匹配节点时保留 [DIRECT] 兜底, 避免空 proxies 产生无效 YAML
+    if (names.length === 0) return block;
     const nameLines = names.map((n) => `      - "${n}"`).join('\n');
     return `    proxies:\n${nameLines}`;
   }
