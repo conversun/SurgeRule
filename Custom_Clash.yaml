@@ -759,7 +759,6 @@ rules:
   - RULE-SET,IP-LAN,DIRECT
   - RULE-SET,IP-Domestic,DIRECT
   - RULE-SET,Alibaba-ASN,DIRECT
-  - RULE-SET,GIA,DIRECT
   - GEOIP,CN,DIRECT,no-resolve
 
   # 10. 兜底
