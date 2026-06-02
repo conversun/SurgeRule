@@ -701,14 +701,6 @@ rule-providers:
     path: ./ruleset/Alibaba-ASN.txt
     interval: 172800
 
-  GIA:
-    type: http
-    behavior: classical
-    format: text
-    url: "https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/gia.list"
-    path: ./ruleset/GIA.txt
-    interval: 172800
-
 # ====== 分流规则 ======
 rules:
   # 0. 拦截层（广告/隐私/恶意/QUIC 噪音）
