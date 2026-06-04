@@ -472,7 +472,7 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: "https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/check.list"
+    url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/check.list"
     path: ./ruleset/Check.list
     interval: 172800
 
@@ -523,7 +523,7 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: "https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/hkbank.list"
+    url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/hkbank.list"
     path: ./ruleset/HKBank.list
     interval: 172800
 
@@ -697,8 +697,16 @@ rule-providers:
     type: http
     behavior: classical
     format: text
-    url: "https://hub.conversun.com/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/ali.list"
+    url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/ali.list"
     path: ./ruleset/Alibaba-ASN.txt
+    interval: 172800
+
+  GIA:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/gia.list"
+    path: ./ruleset/GIA.txt
     interval: 172800
 
 # ====== 分流规则 ======
@@ -759,6 +767,7 @@ rules:
   - RULE-SET,IP-LAN,DIRECT
   - RULE-SET,IP-Domestic,DIRECT
   - RULE-SET,Alibaba-ASN,DIRECT
+  - RULE-SET,GIA,DIRECT
   - GEOIP,CN,DIRECT,no-resolve
 
   # 10. 兜底
