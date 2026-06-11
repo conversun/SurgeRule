@@ -16,7 +16,7 @@ Multi-platform proxy configuration for iOS/macOS network traffic routing. Config
 Custom_Surge.conf          # Primary Surge config (macOS/iOS)
 Custom_QX.conf             # Quantumult X config (iOS)
 Custom_Clash.yaml          # Clash/mihomo config (cross-platform)
-shadowrocket-proxy.conf    # Shadowrocket (whitelist — ChinaMax direct, FINAL proxy)
+shadowrocket-proxy.conf    # Shadowrocket (whitelist — skk.moe domestic direct, FINAL proxy)
 ssk.conf                   # Sukka ruleset reference template (not deployed)
 private/                   # Custom rule lists (referenced via raw GitHub URLs)
   reject.list              #   Domains to block (Parallels, etc.)
