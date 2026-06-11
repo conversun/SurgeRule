@@ -154,7 +154,6 @@ proxy-groups:
     proxies:
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
       - 🏠 ISP
@@ -169,7 +168,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -183,7 +181,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -196,7 +193,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -210,7 +206,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -223,7 +218,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -236,7 +230,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -249,7 +242,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -262,7 +254,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -276,7 +267,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -289,7 +279,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -301,7 +290,6 @@ proxy-groups:
       - 🏠 ISP
       - 🇭🇰 HK
       - 🇸🇬 SG
-      - 🇼🇸 TW
       - 🇯🇵 JP
       - 🇺🇲 US
 
@@ -312,7 +300,6 @@ proxy-groups:
     proxies:
       - DIRECT
       - 🇭🇰 HK
-      - 🇼🇸 TW
       - 🇸🇬 SG
       - 🇯🇵 JP
       - 🇺🇲 US
@@ -325,7 +312,6 @@ proxy-groups:
       - DIRECT
       - 🏠 ISP
       - 🇭🇰 HK
-      - 🇼🇸 TW
       - 🇸🇬 SG
       - 🇯🇵 JP
       - 🇺🇲 US
@@ -338,7 +324,6 @@ proxy-groups:
       - DIRECT
       - 🏠 ISP
       - 🇭🇰 HK
-      - 🇼🇸 TW
       - 🇸🇬 SG
       - 🇯🇵 JP
       - 🇺🇲 US
@@ -351,7 +336,6 @@ proxy-groups:
       - DIRECT
       - 🏠 ISP
       - 🇭🇰 HK
-      - 🇼🇸 TW
       - 🇸🇬 SG
       - 🇯🇵 JP
       - 🇺🇲 US
@@ -375,20 +359,10 @@ proxy-groups:
 
   - name: 🇸🇬 SG
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Singapore.png
-    type: url-test
+    type: fallback
     url: http://cp.cloudflare.com/generate_204
     interval: 300
-    tolerance: 50
     filter: "(?!.*(Game))(新|Singapore|SG)"
-    proxies: [DIRECT]
-
-  - name: 🇼🇸 TW
-    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/China_Taipei.png
-    type: url-test
-    url: http://cp.cloudflare.com/generate_204
-    interval: 300
-    tolerance: 50
-    filter: "(?!.*(Game))(台|Tai|TW)"
     proxies: [DIRECT]
 
   - name: 🇺🇲 US
