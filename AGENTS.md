@@ -16,7 +16,6 @@ Multi-platform proxy configuration for iOS/macOS network traffic routing. Config
 Custom_Surge.conf          # Primary Surge config (macOS/iOS)
 Custom_QX.conf             # Quantumult X config (iOS)
 Custom_Clash.yaml          # Clash/mihomo config (cross-platform)
-shadowrocket-social.conf   # Shadowrocket (social apps only — Instagram/TikTok/YouTube)
 shadowrocket-proxy.conf    # Shadowrocket (GFW proxy list — broader coverage)
 ssk.conf                   # Sukka ruleset reference template (not deployed)
 private/                   # Custom rule lists (referenced via raw GitHub URLs)
