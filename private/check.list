@@ -1,16 +1,31 @@
 # IP Check & DNS Leak Test
-# 网络检测工具（IP 查询、DNS 泄露、浏览器指纹）
+# 网络检测工具（IP 查询、DNS 泄露、浏览器指纹、IP 风险）
 
 # --- IP 查询 ---
 IP-CIDR,142.251.215.0/24,no-resolve
+DOMAIN,ip.skk.moe
 DOMAIN-SUFFIX,ipw.cn
 DOMAIN-SUFFIX,ip111.cn
 DOMAIN-SUFFIX,ip125.com
+DOMAIN-SUFFIX,ip138.com
+DOMAIN-SUFFIX,ipip.net
+DOMAIN-SUFFIX,cip.cc
+DOMAIN-SUFFIX,ipcheck.ing
+DOMAIN-SUFFIX,ip234.in
 DOMAIN-SUFFIX,ipcheck.im
 DOMAIN-SUFFIX,ip-api.com
 DOMAIN-SUFFIX,ipleak.net
 DOMAIN-SUFFIX,ip-score.com
 DOMAIN-SUFFIX,ifconfig.me
+DOMAIN-SUFFIX,ifconfig.co
+DOMAIN-SUFFIX,icanhazip.com
+DOMAIN-SUFFIX,ipify.org
+DOMAIN-SUFFIX,myip.com
+DOMAIN-SUFFIX,whatismyip.com
+DOMAIN-SUFFIX,whatismyipaddress.com
+DOMAIN-SUFFIX,iplocation.net
+DOMAIN-SUFFIX,ip2location.com
+DOMAIN-SUFFIX,db-ip.com
 DOMAIN-SUFFIX,jsonp-ip.com
 DOMAIN-SUFFIX,ping0.cc
 DOMAIN-SUFFIX,test-ipv6.com
@@ -21,19 +36,36 @@ DOMAIN-SUFFIX,ip.sb
 DOMAIN-SUFFIX,dnscheck.tools
 DOMAIN-SUFFIX,dnsleaktest.com
 DOMAIN-SUFFIX,dnsleaktest.org
+DOMAIN-SUFFIX,bash.ws
 
-# --- 浏览器指纹 ---
+# --- 浏览器指纹 / 环境检测 ---
 DOMAIN-SUFFIX,browserleaks.com
 DOMAIN-SUFFIX,browserleaks.net
 DOMAIN-SUFFIX,browserleaks.org
 DOMAIN-SUFFIX,browserscan.net
 DOMAIN-SUFFIX,whoer.net
 DOMAIN-SUFFIX,incolumitas.com
+DOMAIN-SUFFIX,amiunique.org
+DOMAIN-SUFFIX,pixelscan.net
+DOMAIN-SUFFIX,iphey.com
+DOMAIN-SUFFIX,deviceinfo.me
+DOMAIN-SUFFIX,f.vision
+DOMAIN-SUFFIX,2ip.io
+DOMAIN-SUFFIX,2ip.ru
+DOMAIN-SUFFIX,howsmyssl.com
+DOMAIN,coveryourtracks.eff.org
+
+# --- IP 风险 / 纯净度 ---
 DOMAIN-SUFFIX,scamalytics.com
+DOMAIN-SUFFIX,ipqualityscore.com
+DOMAIN-SUFFIX,proxycheck.io
+DOMAIN-SUFFIX,abuseipdb.com
+DOMAIN-SUFFIX,spur.us
 
 # --- VPN 检测 ---
 DOMAIN-SUFFIX,surfshark.com
 DOMAIN-SUFFIX,surfsharkdns.com
+DOMAIN-SUFFIX,mullvad.net
 
 # --- 其他检测工具 ---
 DOMAIN-SUFFIX,vultr.com
