@@ -686,12 +686,15 @@ rule-providers:
 # ====== 分流规则 ======
 rules:
   # 0. 拦截层（广告/隐私/恶意/QUIC 噪音）
-  - RULE-SET,AWAvenue-Ads,REJECT
-  - RULE-SET,Sogouinput,REJECT-DROP
-  - RULE-SET,Reject-Domainset,REJECT
-  - RULE-SET,Reject-NonIP,REJECT
-  - RULE-SET,Reject-NoDrop,REJECT-DROP
-  - RULE-SET,Reject-Drop,REJECT-DROP
+  # --- 暂时停用 reject 规则 ---
+  # - RULE-SET,AWAvenue-Ads,REJECT
+  # - RULE-SET,Sogouinput,REJECT-DROP
+  # - RULE-SET,Reject-Domainset,REJECT
+  # - RULE-SET,Reject-NonIP,REJECT
+  # - RULE-SET,Reject-NoDrop,REJECT-DROP
+  # - RULE-SET,Reject-Drop,REJECT-DROP
+  # --- 屏蔽 QUIC (UDP 443), 强制 HTTP/3 回退 TCP ---
+  - AND,((NETWORK,udp),(DST-PORT,443)),REJECT
 
   # 1. 测速 / 工具
   - RULE-SET,Speedtest-Domainset,Speedtest
@@ -737,7 +740,7 @@ rules:
   - RULE-SET,LAN-NonIP,DIRECT
 
   # 9. IP 规则（此后才会触发本地 DNS 解析）
-  - RULE-SET,IP-Reject,REJECT-DROP
+  # - RULE-SET,IP-Reject,REJECT-DROP
   - RULE-SET,IP-LAN,DIRECT
   - RULE-SET,IP-Domestic,DIRECT
   - RULE-SET,Alibaba-ASN,DIRECT
