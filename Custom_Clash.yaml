@@ -102,7 +102,7 @@ dns:
 tun:
   enable: true
   device: Meta
-  stack: system                # Linux 网关: 系统协议栈满速(基准~7Gbit/s)+最低开销, 配合 auto-redirect; 若防火墙拦截需放行 TUN 出站: sudo iptables -A OUTPUT -o Meta -j ACCEPT
+  stack: mixed                 # 旁路由转发用 mixed/gvisor; system 栈对转发流量不可靠(致只显示IP/无法上网); 7Gbit/s 基准是本机回环, 不适用网关转发
   auto-route: true             # 自动加路由表, 把流量送入 TUN
   auto-redirect: true          # Linux: 用 nftables 接管 forwarded 流量 (网关模式必需)
   auto-detect-interface: true  # 自动跟随默认网卡
@@ -131,7 +131,7 @@ sniffer:
       override-destination: true
     QUIC:
       ports: [443, 8443]
-  parse-pure-ip: false         # 不对纯 IP 连接强制嗅探, 省每连接开销 (fake-ip 下多数流量已带域名)
+  parse-pure-ip: true          # 旁路由: 纯IP连接也嗅探恢复域名供规则匹配; 改 false 会致部分流量只显示IP
   override-destination: true   # 嗅到域名后, 用域名重匹配规则
   skip-domain:
     - '+.apple.com'            # Apple 服务对嗅探敏感, 跳过
