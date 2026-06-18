@@ -43,22 +43,22 @@ dns:
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
-  nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
+  nameserver:                  # 后缀 disable-qtype-65=true: 屏蔽 TYPE65(HTTPS记录), 减少浏览器约 1/3 DNS 查询
+    - 223.5.5.5#disable-qtype-65=true
+    - 119.29.29.29#disable-qtype-65=true
   proxy-server-nameserver:
     - 223.5.5.5
     - 119.29.29.29
-  direct-nameserver:
+  direct-nameserver:           # system = 走 ISP(深圳移动) DNS, 国内直连解析到移动最优 CDN 节点
     - system
-  direct-nameserver-follow-policy: true
+  direct-nameserver-follow-policy: false   # 国内域名(geosite:cn等)直连解析改走 system=深圳移动 DNS, 拿移动就近 CDN; private 类也走本地解析更正确
   # fallback / fallback-filter 已移除 (现代 fake-ip 布局):
   # 被代理域名在节点出口解析, 国内/直连域名走国内 DNS, 统一由 nameserver-policy 分流;
   # 省去原 fallback 对每次真实解析的双查询 + geoip(CN)/geosite(gfw) 判定开销
   nameserver-policy:
     "geosite:cn,apple-cn,category-games@cn,private":
-      - 223.5.5.5
-      - 119.29.29.29
+      - 223.5.5.5#disable-qtype-65=true
+      - 119.29.29.29#disable-qtype-65=true
   fake-ip-filter:
     - '*.lan'
     - '*.local'
@@ -136,6 +136,12 @@ sniffer:
   skip-domain:
     - '+.apple.com'            # Apple 服务对嗅探敏感, 跳过
     - '+.icloud.com'
+  skip-dst-address:            # 不嗅探发往 LAN/私网的连接, 省开销
+    - 192.168.0.0/16
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 127.0.0.0/8
+    - 169.254.0.0/16
 
 proxies: # {{proxies}}
 
