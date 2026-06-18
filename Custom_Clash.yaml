@@ -10,7 +10,7 @@ ipv6: true
 external-controller: 127.0.0.1:9090
 unified-delay: true
 tcp-concurrent: true
-find-process-mode: strict
+find-process-mode: "off"         # 无 PROCESS-NAME 规则, 关闭进程匹配省去每连接进程查找 (网关/路由器推荐); 引号防 YAML 把 off 解成布尔
 etag-support: true
 profile:
   store-selected: true
@@ -19,7 +19,7 @@ profile:
 
 # ====== GeoIP ======
 geodata-mode: true
-geodata-loader: memconservative
+geodata-loader: standard         # Linux 网关内存充足: 全量入内存, geo 匹配更快 (小内存设备改回 memconservative)
 geo-auto-update: true
 geo-update-interval: 24
 geox-url:
@@ -34,7 +34,7 @@ dns:
   prefer-h3: false
   listen: 0.0.0.0:1053
   ipv6: true
-  respect-rules: true
+  respect-rules: false       # fake-ip 已防 DNS 泄漏; 关闭省去每次冷解析的路由评估 (须配套移除 fallback, 否则 8.8.8.8 直连会被污染)
   use-hosts: true
   use-system-hosts: true
   enhanced-mode: fake-ip
@@ -52,16 +52,9 @@ dns:
   direct-nameserver:
     - system
   direct-nameserver-follow-policy: true
-  fallback:
-    - 1.1.1.1
-    - 8.8.8.8
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
-    geosite:
-      - gfw
-    ipcidr:
-      - 240.0.0.0/4
+  # fallback / fallback-filter 已移除 (现代 fake-ip 布局):
+  # 被代理域名在节点出口解析, 国内/直连域名走国内 DNS, 统一由 nameserver-policy 分流;
+  # 省去原 fallback 对每次真实解析的双查询 + geoip(CN)/geosite(gfw) 判定开销
   nameserver-policy:
     "geosite:cn,apple-cn,category-games@cn,private":
       - 223.5.5.5
@@ -109,7 +102,7 @@ dns:
 tun:
   enable: true
   device: Meta
-  stack: mixed                 # system | gvisor | mixed
+  stack: system                # Linux 网关: 系统协议栈满速(基准~7Gbit/s)+最低开销, 配合 auto-redirect; 若防火墙拦截需放行 TUN 出站: sudo iptables -A OUTPUT -o Meta -j ACCEPT
   auto-route: true             # 自动加路由表, 把流量送入 TUN
   auto-redirect: true          # Linux: 用 nftables 接管 forwarded 流量 (网关模式必需)
   auto-detect-interface: true  # 自动跟随默认网卡
@@ -117,6 +110,7 @@ tun:
   mtu: 1500
   dns-hijack:
     - 'any:53'                 # 任何到 :53 的流量都给 mihomo DNS
+    - 'tcp://any:53'           # 同时劫持 DNS-over-TCP, 防 TCP/53 泄漏
   inet4-route-exclude-address:
     - 192.168.0.0/16           # LAN
     - 10.0.0.0/8
@@ -137,7 +131,7 @@ sniffer:
       override-destination: true
     QUIC:
       ports: [443, 8443]
-  parse-pure-ip: true          # 纯 IP 连接也尝试嗅探
+  parse-pure-ip: false         # 不对纯 IP 连接强制嗅探, 省每连接开销 (fake-ip 下多数流量已带域名)
   override-destination: true   # 嗅到域名后, 用域名重匹配规则
   skip-domain:
     - '+.apple.com'            # Apple 服务对嗅探敏感, 跳过
