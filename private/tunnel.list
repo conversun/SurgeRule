@@ -1,0 +1,5 @@
+# gh CLI(api.github.com 会被 skk.moe ai.conf 命中,此处优先覆盖到 Tunnel)
+PROCESS-NAME,gh
+
+# SSH 端口统一走 Tunnel
+DEST-PORT,22
