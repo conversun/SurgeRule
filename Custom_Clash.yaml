@@ -209,6 +209,20 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
+  - name: Apple CDN
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Apple.png
+    type: select
+    proxies:
+      - CDN
+      - Apple
+      - DIRECT
+      - Proxy
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   - name: GitHub
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/GitHub.png
     type: select
@@ -492,6 +506,14 @@ rule-providers:
     path: ./ruleset/Download-NonIP.txt
     interval: 172800
 
+  Apple-CDN:
+    type: http
+    behavior: domain
+    format: text
+    url: "https://ruleset.skk.moe/Clash/domainset/apple_cdn.txt"
+    path: ./ruleset/Apple-CDN.txt
+    interval: 172800
+
   # --- 金融 ---
   HKBank:
     type: http
@@ -545,14 +567,6 @@ rule-providers:
     format: text
     url: "https://ruleset.skk.moe/Clash/non_ip/telegram.txt"
     path: ./ruleset/Telegram-NonIP.txt
-    interval: 172800
-
-  Apple-CDN:
-    type: http
-    behavior: classical
-    format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/apple_cdn.txt"
-    path: ./ruleset/Apple-CDN.txt
     interval: 172800
 
   Microsoft-CDN:
@@ -704,6 +718,7 @@ rules:
   - RULE-SET,AI-SKK,AI
 
   # 3. CDN & 下载
+  - RULE-SET,Apple-CDN,Apple CDN
   - RULE-SET,CDN-Domainset,CDN
   - RULE-SET,CDN-NonIP,CDN
   - RULE-SET,Download-Domainset,CDN
@@ -721,7 +736,6 @@ rules:
 
   # 6. 服务
   - RULE-SET,Telegram-NonIP,Telegram
-  - RULE-SET,Apple-CDN,DIRECT
   - RULE-SET,Microsoft-CDN,DIRECT
   - RULE-SET,Apple-CN,DIRECT
   - RULE-SET,Apple-Services,Apple
