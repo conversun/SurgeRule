@@ -2,6 +2,7 @@
 
 # HSBC 汇丰
 DOMAIN-SUFFIX,hsbc.com.hk
+DOMAIN,hsbc.edge.sdk.awswaf.com
 
 # Hang Seng Bank 恒生银行
 DOMAIN-SUFFIX,hangseng.com
