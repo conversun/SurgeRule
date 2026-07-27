@@ -159,6 +159,18 @@ proxy-groups:
       - 🏠 ISP
       - DIRECT
 
+  - name: Global
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/GFW.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   - name: AI
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/AI.png
     type: select
@@ -545,6 +557,13 @@ rule-providers:
     interval: 172800
 
   # --- 流媒体 ---
+  DMM:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/DMM/DMM.yaml"
+    path: ./ruleset/DMM.yaml
+    interval: 172800
+
   TikTok:
     type: http
     behavior: classical
@@ -622,24 +641,7 @@ rule-providers:
     path: ./ruleset/Google.yaml
     interval: 172800
 
-  # --- 海外常见域名（避免本地 DNS 解析） ---
-  Global:
-    type: http
-    behavior: classical
-    format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/global.txt"
-    path: ./ruleset/Global.txt
-    interval: 172800
-
-  # --- 国内常见域名 ---
-  Domestic:
-    type: http
-    behavior: classical
-    format: text
-    url: "https://ruleset.skk.moe/Clash/non_ip/domestic.txt"
-    path: ./ruleset/Domestic.txt
-    interval: 172800
-
+  # --- 直连 ---
   Direct:
     type: http
     behavior: classical
@@ -654,6 +656,39 @@ rule-providers:
     format: text
     url: "https://ruleset.skk.moe/Clash/non_ip/lan.txt"
     path: ./ruleset/LAN-NonIP.txt
+    interval: 172800
+
+  # --- 国内 / 海外域名（blackmatrix7，替代 skk domestic/global）---
+  # skk 版本保留备份:
+  #   Domestic → https://ruleset.skk.moe/Clash/non_ip/domestic.txt
+  #   Global   → https://ruleset.skk.moe/Clash/non_ip/global.txt
+  China-Domain:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China_Domain.yaml"
+    path: ./ruleset/China-Domain.yaml
+    interval: 172800
+
+  Global-Domain:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Global/Global_Domain.yaml"
+    path: ./ruleset/Global-Domain.yaml
+    interval: 172800
+
+  # 关键词 / no-resolve IP 补充（Surge 版含 USER-AGENT, Clash 版不支持故已剔除）
+  China-NonIP:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/China/China.yaml"
+    path: ./ruleset/China-NonIP.yaml
+    interval: 172800
+
+  Global-NonIP:
+    type: http
+    behavior: classical
+    url: "https://cdn.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Global/Global.yaml"
+    path: ./ruleset/Global-NonIP.yaml
     interval: 172800
 
   # --- IP 规则（此后才会触发本地 DNS 解析） ---
@@ -705,10 +740,11 @@ rules:
   # - RULE-SET,Sogouinput,REJECT-DROP
   # - RULE-SET,Reject-Domainset,REJECT
   # - RULE-SET,Reject-NonIP,REJECT
-  # - RULE-SET,Reject-NoDrop,REJECT-DROP
+  # - RULE-SET,Reject-NoDrop,REJECT
   # - RULE-SET,Reject-Drop,REJECT-DROP
-  # --- 屏蔽 QUIC (UDP 443), 强制 HTTP/3 回退 TCP ---
-  - AND,((NETWORK,udp),(DST-PORT,443)),REJECT
+  # --- 屏蔽代理流量的 QUIC (UDP 443), 强制 HTTP/3 回退 TCP ---
+  # 对齐 Surge `block-quic = all-proxy`: 仅拦代理流量, 国内直连 QUIC 放行
+  - AND,((NETWORK,udp),(DST-PORT,443),(NOT,((GEOIP,CN)))),REJECT
 
   # 1. 测速 / 工具
   - RULE-SET,Speedtest-Domainset,Speedtest
@@ -731,6 +767,7 @@ rules:
   - RULE-SET,Stripe,Stripe
 
   # 5. 流媒体
+  - RULE-SET,DMM,🇯🇵 JP
   - RULE-SET,TikTok,TikTok
   - RULE-SET,Stream,Media
 
@@ -742,16 +779,31 @@ rules:
   - RULE-SET,Microsoft-NonIP,Proxy
   - RULE-SET,Mail,Tunnel
   - DST-PORT,22,Tunnel
+  # 邮件端口 (SMTP/IMAP, 部分机场不支持) — 对齐 private/tunnel.list
+  - DST-PORT,25,Tunnel
+  - DST-PORT,465,Tunnel
+  - DST-PORT,587,Tunnel
+  - DST-PORT,143,Tunnel
+  - DST-PORT,993,Tunnel
   - RULE-SET,GitHub,GitHub
   - RULE-SET,Google,Google
 
-  # 7. 海外常见域名（避免本地 DNS 解析）
-  - RULE-SET,Global,Proxy
-
-  # 8. 国内常见域名
-  - RULE-SET,Domestic,DIRECT
+  # 7. 直连
   - RULE-SET,Direct,DIRECT
   - RULE-SET,LAN-NonIP,DIRECT
+
+  # 8. 国内 / 海外域名
+  # --- 国内域名 ---
+  # - RULE-SET,Domestic,DIRECT
+  - RULE-SET,China-Domain,DIRECT
+
+  # --- 海外域名 ---
+  # - RULE-SET,Global,Proxy
+  - RULE-SET,Global-Domain,Global
+
+  # --- 关键词 / no-resolve IP 补充 ---
+  - RULE-SET,China-NonIP,DIRECT
+  - RULE-SET,Global-NonIP,Global
 
   # 9. IP 规则（此后才会触发本地 DNS 解析）
   # - RULE-SET,IP-Reject,REJECT-DROP
