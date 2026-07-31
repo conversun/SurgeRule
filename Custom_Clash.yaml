@@ -225,8 +225,6 @@ proxy-groups:
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Apple.png
     type: select
     proxies:
-      - CDN
-      - Apple
       - DIRECT
       - Proxy
       - 🏠 ISP
