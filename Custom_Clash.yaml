@@ -352,6 +352,18 @@ proxy-groups:
       - 🇯🇵 JP
       - 🇺🇲 US
 
+  - name: GIA
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Server.png
+    type: select
+    proxies:
+      - DIRECT
+      - Proxy
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
   - name: Final
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Fish.png
     type: select
@@ -722,12 +734,12 @@ rule-providers:
     path: ./ruleset/Alibaba-ASN.txt
     interval: 172800
 
-  GIA:
+  GIA-ASN:
     type: http
     behavior: classical
     format: text
     url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/gia.list"
-    path: ./ruleset/GIA.txt
+    path: ./ruleset/GIA-ASN.txt
     interval: 172800
 
 # ====== 分流规则 ======
@@ -808,7 +820,7 @@ rules:
   - RULE-SET,IP-LAN,DIRECT
   - RULE-SET,IP-Domestic,DIRECT
   - RULE-SET,Alibaba-ASN,DIRECT
-  - RULE-SET,GIA,DIRECT
+  - RULE-SET,GIA-ASN,GIA
   - GEOIP,CN,DIRECT,no-resolve
 
   # 10. 兜底

@@ -87,7 +87,7 @@ Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matche
 | Streaming | `Media`, `TikTok` |
 | Services | `Apple`, `GitHub`, `Google`, `Telegram`, `Tunnel` (mail+SSH) |
 | Finance | `Crypto`, `PayPal`, `Stripe` |
-| Tools | `Speed`, `Check`, `CDN` |
+| Tools | `Speed`, `Check`, `CDN`, `GIA` |
 | Special | `🏠 ISP` (US nodes via regex) |
 | Regions | `🇭🇰 HK`, `🇺🇲 US`, `🇼🇸 TW`, `🇸🇬 SG`, `🇯🇵 JP` |
 
