@@ -19,6 +19,9 @@ DOMAIN-SUFFIX,pcbeta.com
 DOMAIN-SUFFIX,juejin.cn
 DOMAIN-SUFFIX,gia.jd.com
 
+# 国内抖音：snssdk.com 被 blackmatrix7 TikTok 规则集误收（TikTok 国际版用 isnssdk.com）
+DOMAIN-SUFFIX,snssdk.com
+
 DOMAIN,smart.uhdnow.com
 DOMAIN,smart2.uhdnow.com
 DOMAIN,mlc.once.im

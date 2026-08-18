@@ -778,6 +778,8 @@ rules:
 
   # 5. 流媒体
   - RULE-SET,DMM,🇯🇵 JP
+  # 国内抖音：snssdk.com 被 TikTok 规则集误收（TikTok 国际版用 isnssdk.com）
+  - DOMAIN-SUFFIX,snssdk.com,DIRECT
   - RULE-SET,TikTok,TikTok
   - RULE-SET,Stream,Media
 
