@@ -395,9 +395,10 @@ proxy-groups:
 
   - name: 🇸🇬 SG
     icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Singapore.png
-    type: fallback
+    type: url-test
     url: http://cp.cloudflare.com/generate_204
     interval: 300
+    tolerance: 50
     filter: "(?!.*(Game))(新|Singapore|SG)"
     proxies: [DIRECT]
 
