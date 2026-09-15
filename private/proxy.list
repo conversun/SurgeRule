@@ -18,3 +18,8 @@ DOMAIN,downloads.claude.ai
 
 # HSBC 活动站（例外：hkbank.list 直连覆盖，走代理）
 DOMAIN-SUFFIX,redhotoffers.hsbc.com.hk
+
+# uhdnow 影视站视频流（网页/测速直连在 direct.list）
+DOMAIN,v1.uhdnow.com
+DOMAIN,v1-vod1.uhdnow.com
+DOMAIN,v1-vod2.uhdnow.com

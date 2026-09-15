@@ -22,8 +22,12 @@ DOMAIN-SUFFIX,gia.jd.com
 # 国内抖音：snssdk.com 被 blackmatrix7 TikTok 规则集误收（TikTok 国际版用 isnssdk.com）
 DOMAIN-SUFFIX,snssdk.com
 
+# uhdnow 影视站：网页/智能线路/测速直连（v1* 视频流在 proxy.list 走代理）
+DOMAIN,www.uhdnow.com
 DOMAIN,smart.uhdnow.com
 DOMAIN,smart2.uhdnow.com
+DOMAIN,speed.uhdnow.com
+DOMAIN-SUFFIX,uhdnow.online
 DOMAIN,mlc.once.im
 DOMAIN,aaa.204cloud.com
 
