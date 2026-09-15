@@ -15,3 +15,6 @@ DOMAIN-SUFFIX,itunes.apple.com
 DOMAIN,iadcontent.apple.com
 DOMAIN,api-adservices.apple.com
 DOMAIN,downloads.claude.ai
+
+# HSBC 活动站（例外：hkbank.list 直连覆盖，走代理）
+DOMAIN-SUFFIX,redhotoffers.hsbc.com.hk

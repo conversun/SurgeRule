@@ -772,6 +772,8 @@ rules:
   - RULE-SET,Download-NonIP,CDN
 
   # 4. 金融
+  # HSBC 活动站走代理（例外：HKBank 直连覆盖）
+  - DOMAIN-SUFFIX,redhotoffers.hsbc.com.hk,Proxy
   - RULE-SET,HKBank,DIRECT
   - RULE-SET,Crypto,Crypto
   - RULE-SET,PayPal,PayPal
