@@ -89,7 +89,7 @@ Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matche
 | Finance | `Crypto`, `PayPal`, `Stripe` |
 | Tools | `Speed`, `Check`, `CDN`, `GIA` |
 | Special | `🏠 ISP` (US nodes via regex) |
-| Regions | `🇭🇰 HK`, `🇺🇲 US`, `🇼🇸 TW`, `🇸🇬 SG`, `🇯🇵 JP` |
+| Regions | `🇭🇰 HK`, `🇺🇲 US`, `🇸🇬 SG`, `🇯🇵 JP` |
 
 Region groups use `smart` policy with `policy-regex-filter` and `(?!.*(Game))` negative lookahead. New rules MUST use an existing group name — adding a group requires editing `[Proxy Group]`.
 
