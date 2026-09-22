@@ -513,6 +513,14 @@ rule-providers:
     path: ./ruleset/CDN-NonIP.txt
     interval: 172800
 
+  Steam:
+    type: http
+    behavior: classical
+    format: text
+    url: "https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/steam.list"
+    path: ./ruleset/Steam.list
+    interval: 172800
+
   Download-Domainset:
     type: http
     behavior: domain
@@ -765,6 +773,7 @@ rules:
   - RULE-SET,AI-SKK,AI
 
   # 3. CDN & 下载
+  - RULE-SET,Steam,DIRECT
   - RULE-SET,Apple-CDN,Apple CDN
   - RULE-SET,CDN-Domainset,CDN
   - RULE-SET,CDN-NonIP,CDN

@@ -1,5 +1,5 @@
 #!name=Custom Rules
-#!desc=自定义规则 (reject/direct/proxy/tunnel)
+#!desc=自定义规则 (reject/direct/proxy/tunnel/steam)
 #!category=Custom
 
 [Rule]
@@ -7,3 +7,4 @@ RULE-SET,https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/Surg
 RULE-SET,https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/direct.list,DIRECT,extended-matching
 RULE-SET,https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/reject.list,REJECT-DROP,extended-matching
 RULE-SET,https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/tunnel.list,Tunnel,extended-matching
+RULE-SET,https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/steam.list,DIRECT,extended-matching

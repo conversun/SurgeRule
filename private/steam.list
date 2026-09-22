@@ -1,0 +1,29 @@
+# Steam 下载 / 内容分发域名 —— 直连
+# 仅收录游戏本体下载与内容分发，不含 store / community / api（这些仍走代理）
+# 背景：cache*-hkg1.steamcontent.com 会被 skk.moe download.conf 收进 CDN 组走代理
+
+# --- 官方下载 CDN ---
+DOMAIN-SUFFIX,steamcontent.com
+DOMAIN-SUFFIX,steamserver.net
+DOMAIN-SUFFIX,steamusercontent.com
+DOMAIN-SUFFIX,cm.steampowered.com
+
+# --- Akamai 分发 ---
+DOMAIN-SUFFIX,steampipe.akamaized.net
+DOMAIN-SUFFIX,steampipe-kr.akamaized.net
+DOMAIN-SUFFIX,steampipe-partner.akamaized.net
+
+# --- 蒸汽平台（Steam 中国）及国内加速 CDN ---
+DOMAIN-SUFFIX,steamchina.com
+DOMAIN-SUFFIX,wmsjsteam.com
+DOMAIN,csgo.wmsj.cn
+DOMAIN,dota2.wmsj.cn
+DOMAIN,xz.pphimalayanrt.com
+DOMAIN,dl.steam.clngaa.com
+DOMAIN,dl.steam.ksyna.com
+DOMAIN,st.dl.bscstorage.net
+DOMAIN,st.dl.eccdnx.com
+DOMAIN,st.dl.pinyuncloud.com
+DOMAIN,steampipe.steamcontent.tnkjmec.com
+DOMAIN,steampowered.com.8686c.com
+DOMAIN,steamstatic.com.8686c.com

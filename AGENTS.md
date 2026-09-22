@@ -29,8 +29,9 @@ private/                   # Custom rule lists (referenced via raw GitHub URLs)
   gia.list                 #   CN2 GIA / CMIN2 / CU9929 VPS ASNs (direct, no proxy)
   ali.list                 #   Alibaba US ASN (direct overseas CDN for Taobao/Alipay)
   tunnel.list              #   Overrides to Tunnel policy (e.g. gh CLI vs ai.conf)
+  steam.list               #   Steam download/content CDN (direct; excludes store/community)
 module/                    # Surge extension modules (.sgmodule)
-  custom-rules.sgmodule    #   Injects private/{proxy,direct,reject,tunnel}.list
+  custom-rules.sgmodule    #   Injects private/{proxy,direct,reject,tunnel,steam}.list
   ad-block.sgmodule        #   iOS ad blocking (REJECT-DROP)
   ad-block-lite.sgmodule   #   macOS lite ad blocking
   jpark.sgmodule           #   JParking domain blocks + API rejects
