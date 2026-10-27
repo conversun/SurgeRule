@@ -1,75 +1,43 @@
+// Sub-Store 文件脚本；普通版和分享版共用，差异放在 $arguments。
+const { COLLECTION = 'private-proxy', DNS_OVERRIDES = {} } = $arguments;
+const overrides = typeof DNS_OVERRIDES === 'string' ? JSON.parse(DNS_OVERRIDES) : DNS_OVERRIDES;
+const config = ProxyUtils.yaml.safeLoad($content);
 const raw = await produceArtifact({
   type: 'collection',
-  name: 'private-proxy',
+  name: COLLECTION,
   platform: 'ClashMeta',
 });
+const proxies = ProxyUtils.yaml.safeLoad(raw).proxies;
+const allNames = proxies.map((proxy) => proxy.name);
+const groups = config['proxy-groups'];
+const regionNames = groups.filter((group) => group.type === 'url-test').map((group) => group.name);
 
-const proxies = ProxyUtils.parse(raw);
-const allNames = proxies.map((p) => p.name);
-
-let proxyYaml = ProxyUtils.produce(proxies, 'ClashMeta');
-proxyYaml = proxyYaml.replace(/^proxies:\n?/m, '');
-$content = $content.replace(/^proxies:.*$/m, `proxies:\n${proxyYaml}`);
-
-// ===================== 识别 url-test 类型组（地区组）=====================
-const urlTestGroups = [...$content.matchAll(/- name: (.+)\n(?:    .+\n)*?    type: url-test/g)].map((m) => m[1].trim());
-
-// ===================== url-test 组注入过滤后的节点 =====================
-$content = $content.replace(
-  /    filter: "(.+)"\n    proxies: \[(?:DIRECT)?\]/g,
-  (block, filterStr) => {
-    const regex = new RegExp(filterStr);
-    const names = allNames.filter((n) => regex.test(n));
-    // filter 无匹配节点时保留 [DIRECT] 兜底, 避免空 proxies 产生无效 YAML
-    if (names.length === 0) return block;
-    const nameLines = names.map((n) => `      - "${n}"`).join('\n');
-    return `    proxies:\n${nameLines}`;
+config.proxies = proxies;
+for (const group of groups) {
+  if (group.filter) {
+    const regex = new RegExp(group.filter);
+    const names = allNames.filter((name) => regex.test(name));
+    group.proxies = names.length ? names : ['DIRECT'];
+    // 已完成筛选；保留 filter 会让 DIRECT 兜底再次被地区正则排除。
+    delete group.filter;
+  } else if (group.type === 'select' && group.proxies.some((name) => regionNames.includes(name))) {
+    group.proxies = [...new Set([...group.proxies, ...allNames])];
   }
-);
-
-// ===================== select 组自动追加全部节点 =====================
-// 含地区组的 select 组才需要注入 allNames
-$content = $content.replace(
-  /(- name: .+\n(?:    .+\n)*?    type: select\n    proxies:\n)((?:      - .+\n)+)/g,
-  (block, header, membersBlock) => {
-    const hasRegionGroup = urlTestGroups.some((g) => membersBlock.includes(g));
-    if (hasRegionGroup) {
-      const nameLines = allNames.map((n) => `      - "${n}"`).join('\n');
-      return `${header}${membersBlock}${nameLines}\n`;
-    }
-    return block;
-  }
-);
-
-// ===================== 节点专用 DNS 注入 =====================
-// Surge [Host] *.foo.com = server:X 在 mihomo 里对应 dns.proxy-server-nameserver-policy
-// 重要: 不是 nameserver-policy ! mihomo 把 DNS 拆成三条独立路径:
-//   - nameserver-policy            -> 客户端查询走哪个上游
-//   - direct-nameserver(+policy)   -> 直连 dial 用
-//   - proxy-server-nameserver(+policy) -> dial proxy server hostname 用 ← 节点需要这个
-// key: 必须用 +.suffix 后缀格式 (匹配根域 + 所有子域)
-// value: DNS server (支持 udp/tcp/https/quic, 见 mihomo 文档)
-// 只有订阅里实际出现匹配后缀的节点时, 对应规则才会被注入
-const DNS_OVERRIDES = {
-  // '+.your-private.domain': 'your-dns-server:port',
-};
-
-const activeDnsLines = Object.entries(DNS_OVERRIDES)
-  .filter(([key]) => {
-    const suffix = key.slice(1); // "+.foo.com" -> ".foo.com"
-    return proxies.some(
-      (p) => typeof p.server === 'string' && p.server.toLowerCase().endsWith(suffix)
-    );
-  })
-  .map(([key, dns]) => `    "${key}": "${dns}"`);
-
-if (activeDnsLines.length > 0) {
-  // 在 proxy-server-nameserver 列表块后面插入 proxy-server-nameserver-policy 子块
-  const policyBlock =
-    '  proxy-server-nameserver-policy:\n' +
-    activeDnsLines.join('\n') + '\n';
-  $content = $content.replace(
-    /(  proxy-server-nameserver:\n(?:    - .+\n)+)/,
-    (block) => `${block}${policyBlock}`
-  );
 }
+
+// 仅作用于节点域名解析，不改客户端查询或直连 DNS。
+for (const [key, dns] of Object.entries(overrides)) {
+  if (!key.startsWith('+.')) throw new Error(`DNS_OVERRIDES requires +.suffix keys: ${key}`);
+  const domain = key.slice(2).toLowerCase();
+  if (proxies.some((proxy) => {
+    const server = proxy.server.toLowerCase();
+    return server === domain || server.endsWith(`.${domain}`);
+  })) {
+    config.dns['proxy-server-nameserver-policy'] = {
+      ...config.dns['proxy-server-nameserver-policy'],
+      [key]: dns,
+    };
+  }
+}
+
+$content = ProxyUtils.yaml.safeDump(config);

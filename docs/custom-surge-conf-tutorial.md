@@ -1,5 +1,9 @@
 # Surge 配置教程：`Custom_Surge.conf` 深度解读
 
+> 维护入口已迁移：分流编辑 `routing/manifest.json`，基础设置编辑 `templates/Custom_Surge.conf`，
+> 然后运行 `node script/generate-configs.mjs`。根目录配置是生成产物。
+> 下文是历史配置讲解，具体规则和模块以当前清单及文件为准；参见[生成与维护指南](rule-generation.md)。
+
 ## 一、整体架构：主配置 + 模块
 
 本配置采用 **"精简主配置 + 功能模块"** 的架构设计。核心思路：

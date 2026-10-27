@@ -1,0 +1,161 @@
+{
+  "interval": 172800,
+  "policyNames": {
+    "qx": {
+      "Proxy": "Outside",
+      "AI": "AI Suite",
+      "Media": "Global Media",
+      "Speed": "Speedtest",
+      "Tunnel": "Mail",
+      "DIRECT": "direct",
+      "REJECT": "reject",
+      "REJECT-DROP": "reject"
+    },
+    "clash": { "Speed": "Speedtest" }
+  },
+  "sections": [
+    {
+      "title": "0. 拦截层（广告/隐私/恶意）",
+      "platforms": ["clash", "qx"],
+      "note": "Clash 保留暂停拦截的现状；Surge 广告拦截由模块管理。",
+      "rules": [
+        {
+          "id": "AWAvenue-Ads",
+          "source": "url",
+          "urls": {
+            "clash": "https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.yaml",
+            "qx": "https://cdn.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-QuantumultX.list"
+          },
+          "behavior": "domain",
+          "policy": "REJECT",
+          "disabled": ["clash"]
+        },
+        { "id": "Reject-Domainset", "source": "skk:domainset/reject", "policy": "REJECT", "qxTag": "AdBlock Domain (skk)", "disabled": ["clash"] },
+        { "id": "Reject-NonIP", "source": "skk:non_ip/reject", "policy": "REJECT", "qxTag": "AdBlock Rule (skk)", "disabled": ["clash"] },
+        { "id": "Reject-NoDrop", "source": "skk:non_ip/reject-no-drop", "policy": "REJECT", "qxTag": "AdBlock NoDrop (skk)", "disabled": ["clash"] },
+        { "id": "Reject-Drop", "source": "skk:non_ip/reject-drop", "policy": "REJECT-DROP", "qxTag": "AdBlock Drop (skk)", "disabled": ["clash"] },
+        { "id": "Sogouinput", "source": "skk:non_ip/sogouinput", "policy": "REJECT-DROP", "qxTag": "Sogou Input (skk)", "disabled": ["clash"] },
+        {
+          "id": "QUIC",
+          "match": "AND,((NETWORK,udp),(DST-PORT,443),(NOT,((GEOIP,CN))))",
+          "policy": "REJECT",
+          "platforms": ["clash"],
+          "note": "保留原有非 CN UDP/443 拦截；不等同于 Surge 按最终代理策略阻断 QUIC。"
+        }
+      ]
+    },
+    {
+      "title": "1. 测速 / 工具",
+      "rules": [
+        { "id": "Speedtest-Domainset", "source": "skk:domainset/speedtest", "policy": "Speed", "qxTag": "Speedtest (skk)" },
+        { "id": "Check", "source": "private:check", "policy": "Check" }
+      ]
+    },
+    {
+      "title": "2. AI",
+      "rules": [
+        { "id": "AI-SKK", "source": "skk:non_ip/ai", "policy": "AI", "qxTag": "AI (skk)" }
+      ]
+    },
+    {
+      "title": "3. CDN & 下载",
+      "rules": [
+        { "id": "Steam", "source": "private:steam", "policy": "DIRECT", "qxTag": "Steam Download", "note": "Steam 下载直连必须位于 download 规则之前。" },
+        { "id": "Apple-CDN", "source": "skk:domainset/apple_cdn", "policy": "Apple CDN", "qxTag": "Apple CDN (skk)" },
+        { "id": "CDN-Domainset", "source": "skk:domainset/cdn", "policy": "CDN", "qxTag": "CDN Domainset (skk)" },
+        { "id": "CDN-NonIP", "source": "skk:non_ip/cdn", "policy": "CDN", "qxTag": "CDN (skk)" },
+        { "id": "Download-Domainset", "source": "skk:domainset/download", "policy": "CDN", "qxTag": "Download Domainset (skk)" },
+        { "id": "Download-NonIP", "source": "skk:non_ip/download", "policy": "CDN", "qxTag": "Download (skk)" }
+      ]
+    },
+    {
+      "title": "4. 金融",
+      "rules": [
+        { "id": "HSBC-Offer", "match": "DOMAIN-SUFFIX,redhotoffers.hsbc.com.hk", "policy": "Proxy", "platforms": ["clash", "qx"], "qxOrder": 20, "note": "HSBC 活动站走代理，覆盖 HKBank 直连；Surge 由自定义模块处理。" },
+        { "id": "HKBank", "source": "private:hkbank", "policy": "DIRECT" },
+        { "id": "Crypto", "source": "blackmatrix7:Crypto", "policy": "Crypto" },
+        { "id": "PayPal", "source": "blackmatrix7:PayPal", "policy": "PayPal" },
+        { "id": "Stripe", "source": "blackmatrix7:Stripe", "policy": "Stripe" }
+      ]
+    },
+    {
+      "title": "5. 流媒体",
+      "rules": [
+        { "id": "DMM", "source": "blackmatrix7:DMM", "policy": "🇯🇵 JP", "platforms": ["surge", "clash"] },
+        { "id": "Douyin", "match": "DOMAIN-SUFFIX,snssdk.com", "policy": "DIRECT", "platforms": ["clash", "qx"], "qxOrder": 10, "note": "国内抖音排除 TikTok 规则误收；Surge 由自定义模块处理。" },
+        { "id": "TikTok", "source": "blackmatrix7:TikTok", "policy": "TikTok" },
+        { "id": "Stream", "source": "skk:non_ip/stream", "policy": "Media", "qxTag": "Stream (skk)" }
+      ]
+    },
+    {
+      "title": "6. 服务",
+      "rules": [
+        { "id": "APNs", "match": "DOMAIN-SUFFIX,push.apple.com", "policy": "DIRECT", "platforms": ["qx"], "qxOrder": 0, "note": "APNs 直连，避免推送延迟。" },
+        { "id": "Telegram-NonIP", "source": "skk:non_ip/telegram", "policy": "Telegram", "qxTag": "Telegram (skk)" },
+        { "id": "Microsoft-CDN", "source": "skk:non_ip/microsoft_cdn", "policy": "DIRECT", "qxTag": "Microsoft CDN (skk)", "surgeOptions": [] },
+        { "id": "Apple-CN", "source": "skk:non_ip/apple_cn", "policy": "DIRECT", "qxTag": "Apple CN (skk)", "surgeOptions": [] },
+        { "id": "Apple-Services", "source": "skk:non_ip/apple_services", "policy": "Apple", "qxTag": "Apple Services (skk)" },
+        { "id": "Microsoft-NonIP", "source": "skk:non_ip/microsoft", "policy": "Proxy", "qxTag": "Microsoft (skk)" },
+        { "id": "Mail", "source": "blackmatrix7:Mail", "policy": "Tunnel" },
+        { "id": "SSH", "match": "DEST-PORT,22", "policy": "Tunnel", "platforms": ["clash"], "note": "Surge 由 private/tunnel.list 模块覆盖；QX 保留仅 Mail 规则集的现状。" },
+        { "id": "SMTP", "match": "DEST-PORT,25", "policy": "Tunnel", "platforms": ["clash"] },
+        { "id": "SMTPS", "match": "DEST-PORT,465", "policy": "Tunnel", "platforms": ["clash"] },
+        { "id": "Submission", "match": "DEST-PORT,587", "policy": "Tunnel", "platforms": ["clash"] },
+        { "id": "IMAP", "match": "DEST-PORT,143", "policy": "Tunnel", "platforms": ["clash"] },
+        { "id": "IMAPS", "match": "DEST-PORT,993", "policy": "Tunnel", "platforms": ["clash"] },
+        { "id": "GitHub", "source": "blackmatrix7:GitHub", "policy": "GitHub" },
+        { "id": "Google", "source": "blackmatrix7:Google", "policy": "Google", "platforms": ["surge", "clash"] }
+      ]
+    },
+    {
+      "title": "7. 海外常见域名（避免本地 DNS 解析）",
+      "platforms": ["qx"],
+      "note": "QX 保留 skk global/domestic 及原有顺序，不随 Surge/Clash 切换到 blackmatrix7。",
+      "rules": [
+        { "id": "Global", "source": "skk:non_ip/global", "policy": "Proxy", "qxTag": "Global (skk)" }
+      ]
+    },
+    {
+      "title": "8. 国内常见域名",
+      "platforms": ["qx"],
+      "rules": [
+        { "id": "Domestic", "source": "skk:non_ip/domestic", "policy": "DIRECT", "qxTag": "Domestic (skk)" }
+      ]
+    },
+    {
+      "title": "7. 直连",
+      "qxTitle": null,
+      "rules": [
+        { "id": "Direct", "source": "skk:non_ip/direct", "policy": "DIRECT", "qxTag": "Direct (skk)" },
+        { "id": "LAN-NonIP", "source": "skk:non_ip/lan", "policy": "DIRECT", "qxTag": "LAN NonIP (skk)", "surgeOptions": [] }
+      ]
+    },
+    {
+      "title": "8. 国内 / 海外域名",
+      "platforms": ["surge", "clash"],
+      "rules": [
+        { "id": "China-Domain", "source": "blackmatrix7:China/China_Domain", "policy": "DIRECT" },
+        { "id": "Global-Domain", "source": "blackmatrix7:Global/Global_Domain", "policy": "Global" },
+        { "id": "China-NonIP", "source": "blackmatrix7:China", "policy": "DIRECT", "note": "关键词 / IP 补充；使用上游各平台原生版本，不跨平台转换 USER-AGENT 等规则。" },
+        { "id": "Global-NonIP", "source": "blackmatrix7:Global", "policy": "Global" }
+      ]
+    },
+    {
+      "title": "9. IP 规则",
+      "rules": [
+        { "id": "IP-Reject", "source": "skk:ip/reject", "policy": "REJECT-DROP", "qxTag": "IP Reject (skk)", "surgeOptions": [], "disabled": ["clash"] },
+        { "id": "IP-LAN", "source": "skk:ip/lan", "policy": "DIRECT", "qxTag": "IP LAN (skk)", "surgeSource": "LAN", "surgeOptions": [] },
+        { "id": "IP-Domestic", "source": "skk:ip/domestic", "policy": "DIRECT", "qxTag": "IP Domestic (skk)", "surgeOptions": [] },
+        { "id": "Alibaba-ASN", "source": "private:ali", "policy": "DIRECT", "qxTag": "Alibaba ASN", "surgeOptions": [], "clashPath": "./ruleset/Alibaba-ASN.txt" },
+        { "id": "GIA-ASN", "source": "private:gia", "policy": "GIA", "qxTag": "GIA ASN", "surgeOptions": [], "clashPath": "./ruleset/GIA-ASN.txt" },
+        { "id": "China-IP", "match": "GEOIP,CN", "policy": "DIRECT", "surgeOptions": ["no-resolve"], "clashOptions": ["no-resolve"], "qxOrder": 30 }
+      ]
+    },
+    {
+      "title": "10. 兜底",
+      "rules": [
+        { "id": "Final", "match": "FINAL", "policy": "Final", "surgeOptions": ["dns-failed"], "qxOrder": 40 }
+      ]
+    }
+  ]
+}

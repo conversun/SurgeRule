@@ -1,0 +1,430 @@
+# ====== 基础设置 ======
+port: 7890
+socks-port: 7891
+mixed-port: 7893
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: info
+ipv6: true
+external-controller: 127.0.0.1:9090
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: "off"         # 无 PROCESS-NAME 规则, 关闭进程匹配省去每连接进程查找 (网关/路由器推荐); 引号防 YAML 把 off 解成布尔
+etag-support: true
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+
+# ====== GeoIP ======
+geodata-mode: true
+geodata-loader: standard         # Linux 网关内存充足: 全量入内存, geo 匹配更快 (小内存设备改回 memconservative)
+geo-auto-update: true
+geo-update-interval: 24
+geox-url:
+  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+
+# ====== DNS ======
+dns:
+  enable: true
+  cache-algorithm: arc
+  prefer-h3: false
+  listen: 0.0.0.0:1053
+  ipv6: true
+  respect-rules: false       # fake-ip 已防 DNS 泄漏; 关闭省去每次冷解析的路由评估 (须配套移除 fallback, 否则 8.8.8.8 直连会被污染)
+  use-hosts: true
+  use-system-hosts: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter-mode: blacklist
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:                  # 后缀 disable-qtype-65=true: 屏蔽 TYPE65(HTTPS记录), 减少浏览器约 1/3 DNS 查询
+    - 223.5.5.5#disable-qtype-65=true
+    - 119.29.29.29#disable-qtype-65=true
+  proxy-server-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  direct-nameserver:           # system = 走 ISP(深圳移动) DNS, 国内直连解析到移动最优 CDN 节点
+    - system
+  direct-nameserver-follow-policy: false   # 国内域名(geosite:cn等)直连解析改走 system=深圳移动 DNS, 拿移动就近 CDN; private 类也走本地解析更正确
+  # fallback / fallback-filter 已移除 (现代 fake-ip 布局):
+  # 被代理域名在节点出口解析, 国内/直连域名走国内 DNS, 统一由 nameserver-policy 分流;
+  # 省去原 fallback 对每次真实解析的双查询 + geoip(CN)/geosite(gfw) 判定开销
+  nameserver-policy:
+    "geosite:cn,apple-cn,category-games@cn,private":
+      - 223.5.5.5#disable-qtype-65=true
+      - 119.29.29.29#disable-qtype-65=true
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - 'localhost.ptlogin2.qq.com'
+    - 'time.windows.com'
+    - 'time.apple.com'
+    - '+.pool.ntp.org'
+    - '+.stun.*'
+    # --- 微软网络检测 ---
+    - 'dns.msftncsi.com'
+    - '+.msftconnecttest.com'
+    - '+.msftncsi.com'
+    # --- 游戏主机 ---
+    - '+.srv.nintendo.net'
+    - '+.stun.playstation.net'
+    - 'xbox.*.microsoft.com'
+    - '+.xboxlive.com'
+    # --- VoIP STUN/TURN ---
+    - '+.turn.twilio.com'
+    - '+.stun.twilio.com'
+    - 'stun.syncthing.net'
+    # --- 战网 ---
+    - '+.logon.battlenet.com.cn'
+    - '+.logon.battle.net'
+    - '+.blzstatic.cn'
+    # --- 系统连通性探测 ---
+    - 'network-test.debian.org'
+    - 'detectportal.firefox.com'
+    - 'resolver1.opendns.com'
+    # --- NTP ---
+    - 'ntp.*.com'
+    - 'time.*.com'
+    - 'time.*.gov'
+    - 'time.*.edu.cn'
+    - '+.ntp.org.cn'
+
+# ====== TUN ======
+# 透明代理 / 网关旁路由 (mihomo on Linux/Win, Clash Meta on Android)
+# Mac Surge / iOS Stash 各有自带 TUN 实现, 不读这段
+# 启用 TUN 需要管理员权限 + /dev/net/tun (Linux)
+tun:
+  enable: true
+  device: Meta
+  stack: mips                  # mihomo 自研协议栈, 使用默认 cubic 拥塞控制
+  auto-route: true             # 自动加路由表, 把流量送入 TUN
+  auto-redirect: true          # Linux: 用 nftables 接管 forwarded 流量 (网关模式必需)
+  auto-detect-interface: true  # 自动跟随默认网卡
+  strict-route: false          # 不强制覆盖, 本地优先级路由生效
+  mtu: 1500
+  dns-mode: hijack             # mihomo v1.19.33+: 配置系统 DNS 并拦截其他网卡的 53 端口流量; Linux 需 auto-redirect
+  dns-hijack:
+    - 'any:53'                 # 任何到 :53 的流量都给 mihomo DNS
+    - 'tcp://any:53'           # 同时劫持 DNS-over-TCP, 防 TCP/53 泄漏
+  route-exclude-address:
+    - 192.168.0.0/16           # LAN
+    - 10.0.0.0/8
+    - 172.16.0.0/12            # 含 Docker bridge
+    - 169.254.0.0/16           # link-local
+    # 注意: 不要排除 198.18.0.0/16, fake-ip 段必须由 TUN 接管
+
+# ====== Sniffer ======
+# 从 TLS Client Hello / HTTP Host 嗅出域名, 恢复 fake-ip / 直连 IP 场景下丢失的域名
+# 让 RULE-SET 在透明代理下也能精准匹配, 不再 fallthrough 到 MATCH/Final
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080, 8880]
+      override-destination: true
+    QUIC:
+      ports: [443, 8443]
+  parse-pure-ip: true          # 旁路由: 纯IP连接也嗅探恢复域名供规则匹配; 改 false 会致部分流量只显示IP
+  override-destination: true   # 嗅到域名后, 用域名重匹配规则
+  skip-domain:
+    - '+.apple.com'            # Apple 服务对嗅探敏感, 跳过
+    - '+.icloud.com'
+  skip-dst-address:            # 不嗅探发往 LAN/私网的连接, 省开销
+    - 192.168.0.0/16
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 127.0.0.0/8
+    - 169.254.0.0/16
+
+proxies: # {{proxies}}
+
+# ====== 策略组 ======
+proxy-groups:
+  # ------ 基础策略 ------
+  - name: Proxy
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Global.png
+    type: select
+    proxies:
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+      - 🏠 ISP
+      - DIRECT
+
+  - name: Global
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/GFW.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: AI
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/AI.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 流媒体 ------
+  - name: Media
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Stream.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: TikTok
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/TikTok.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 服务 ------
+  - name: Apple
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Apple.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Apple CDN
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Apple.png
+    type: select
+    proxies:
+      - DIRECT
+      - Proxy
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: GitHub
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/GitHub.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Google
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Google.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Telegram
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Telegram.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Tunnel
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Link.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 金融 ------
+  - name: Crypto
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Crypto.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: PayPal
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/PayPal.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Stripe
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ 工具 ------
+  - name: Speedtest
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/SpeedTest.png
+    type: select
+    proxies:
+      - DIRECT
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Check
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Location.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: CDN
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Cloud.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: GIA
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Server.png
+    type: select
+    proxies:
+      - DIRECT
+      - Proxy
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  - name: Final
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Fish.png
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+      - 🏠 ISP
+      - 🇭🇰 HK
+      - 🇸🇬 SG
+      - 🇯🇵 JP
+      - 🇺🇲 US
+
+  # ------ ISP ------
+  - name: 🏠 ISP
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Home.png
+    type: select
+    filter: "(?!.*(Game))(美|States|US)"
+    proxies: [DIRECT]
+
+  # ------ 地区节点组 ------
+  - name: 🇭🇰 HK
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Hong_Kong.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+    filter: "(?!.*(Game))(港|Hong|HK)"
+    proxies: [DIRECT]
+
+  - name: 🇸🇬 SG
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Singapore.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+    filter: "(?!.*(Game))(新|Singapore|SG)"
+    proxies: [DIRECT]
+
+  - name: 🇺🇲 US
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/USA.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+    filter: "(?!.*(Game))(美|States|US)"
+    proxies: [DIRECT]
+
+  - name: 🇯🇵 JP
+    icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/main/Icon/Color/Japan.png
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: 300
+    tolerance: 50
+    filter: "(?!.*(Game))(日|Japan|JP)"
+    proxies: [DIRECT]
+
+# ====== 远程规则集 ======
+rule-providers:
+# {{PROVIDERS}}
+
+# ====== 分流规则 ======
+rules:
+# {{RULES}}

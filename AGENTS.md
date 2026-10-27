@@ -8,14 +8,26 @@ Multi-platform proxy configuration for iOS/macOS network traffic routing. Config
 
 ## Build/Lint/Test
 
-**None.** Declarative config repo — no build system, no linter, no tests. Changes are validated by the proxy app on-device. Before committing, manually verify: correct rule syntax, valid URLs, no duplicates, proper ordering, and policy names that match existing proxy groups.
+Generate with `node script/generate-configs.mjs` (Node.js 18+ or Bun, no dependencies).
+Validate with `node script/generate-configs.mjs --check`, `bun test` and `git diff --check`.
+Tests use Bun 1.3.10 without dependencies; `.github/workflows/config-check.yml` runs them on push and PR.
+There is no client syntax linter. Final client validation is on-device.
+The generator checks manifest structure, policy references and routing output freshness, not remote ruleset contents.
+Before committing, manually verify correct rule syntax, valid URLs, no duplicates, ordering and client-specific behavior.
+
+`Custom_Surge.conf`, `Custom_QX.conf` and `Custom_Clash.yaml` are generated artifacts.
+Edit `routing/manifest.json` for routing, or `templates/` for platform-specific settings, then regenerate.
+Keep generated files in the change so existing Sub-Store URLs continue working.
+See `docs/rule-generation.md` for platform exceptions and maintenance commands.
 
 ## File Structure
 
 ```
-Custom_Surge.conf          # Primary Surge config (macOS/iOS)
-Custom_QX.conf             # Quantumult X config (iOS)
-Custom_Clash.yaml          # Clash/mihomo config (cross-platform)
+Custom_Surge.conf          # Generated Surge config (macOS/iOS)
+Custom_QX.conf             # Generated Quantumult X config (iOS)
+Custom_Clash.yaml          # Generated Clash/mihomo config (cross-platform)
+routing/manifest.json     # Shared routing sources, order, policies and platform exceptions
+templates/                # Client-specific base configs with routing placeholders
 shadowrocket-proxy.conf    # Shadowrocket (whitelist — skk.moe domestic direct, FINAL proxy)
 ssk.conf                   # Sukka ruleset reference template (not deployed)
 private/                   # Custom rule lists (referenced via raw GitHub URLs)
@@ -41,9 +53,12 @@ module/                    # Surge extension modules (.sgmodule)
   private.sgmodule         #   MITM hostname additions
   hide-qbittorrent.sgmodule #  Hide BT client traffic in Replica
   lg.sgmodule              #   VIF excluded routes (LG ThinQ, casting)
-script/                    # Sub-Store proxy injection scripts (.js)
-  clash_proxy.js           #   Injects proxies into Custom_Clash.yaml
+script/                    # Config generation and Sub-Store node injection
+  generate-configs.mjs     #   Generates the three Custom_* configs; --check is read-only
+  clash_proxy.js           #   Shared Clash node injection; COLLECTION and DNS_OVERRIDES arguments
+  surge-file.js            #   Public Surge file injection; collection/managed URL/SMM/Ponte arguments
   surge_proxy.js           #   Injects proxies into Surge (untracked — contains secrets)
+tests/                     # Bun generation and Sub-Store assembly regressions; no live subscriptions
 docs/                      # Reference documentation
 ```
 
@@ -77,7 +92,9 @@ Use `DOMAIN-SUFFIX` for services with subdomains, `DOMAIN` only for exact matche
 # ====== 10. 兜底 ======                    → FINAL,Final,dns-failed
 ```
 
-**New rules go in the appropriate numbered section.** Never append to the end. Ad blocking is handled by modules (`ad-block.sgmodule`), not the main conf.
+**New rules go in the appropriate section of `routing/manifest.json`.** Never append after FINAL.
+The manifest records platform-specific order; QX still uses skk global/domestic, while Surge/Clash use blackmatrix7.
+Surge ad blocking is handled by modules (`ad-block.sgmodule`), not the main conf.
 
 ## Proxy Groups (policy names used in rules)
 
@@ -125,10 +142,15 @@ Directives `%APPEND%` / `%INSERT%` apply **only** to `key = value` fields (`[Gen
 
 ## Script Conventions (Sub-Store)
 
-`clash_proxy.js` uses Sub-Store's API:
+Public file scripts `clash_proxy.js` and `surge-file.js` use Sub-Store's API:
 - `produceArtifact()` — fetch proxy collection
-- `ProxyUtils.parse(raw)` / `ProxyUtils.produce(proxies, platform)` — parse/serialize
+- `ProxyUtils.yaml.safeLoad/safeDump` — parse and serialize native Clash artifacts
+- `ProxyUtils.parse(raw)` — parse Surge node names
+- `$arguments` — per-file collection, private DNS, managed URL and device overrides
 - `$content` — the target config file content (mutated in place)
+
+Keep private values in Sub-Store arguments, not in public scripts.
+See `docs/substore-deployment.md` for the file/parameter matrix and staged deployment.
 
 ## Comment Conventions
 
@@ -146,13 +168,14 @@ Terse conventional commits: `feat: client`, `fix: arg`, `update`. No long descri
 ## Common Tasks
 
 ### Add a domain to an existing policy
-Edit the appropriate `private/*.list` file. No config changes needed.
+Edit the appropriate `private/*.list` file if it is already referenced by the target client.
+Surge custom-rules module lists are not automatically loaded by Clash/QX; check the manifest before assuming cross-platform coverage.
 
 ### Add a new service with its own policy
 1. Create `private/servicename.list` with domain rules
-2. Add policy group in `[Proxy Group]` of `Custom_Surge.conf`
-3. Add `RULE-SET` in `[Rule]` at the correct numbered section
-4. If multi-platform: replicate in `Custom_QX.conf` and `Custom_Clash.yaml` (different syntax)
+2. Add the policy group to each applicable base config in `templates/`
+3. Add one source/policy entry to the appropriate section of `routing/manifest.json`
+4. Add any cross-platform name mapping in `policyNames`, then generate and run `--check`
 
 ### Block a domain
 Add to `private/reject.list`: `DOMAIN-SUFFIX,unwanted.com`
