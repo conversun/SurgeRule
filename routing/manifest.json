@@ -54,6 +54,18 @@
     {
       "title": "2. AI",
       "rules": [
+        { "id": "Claude-Web", "match": "DOMAIN-SUFFIX,claude.ai", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Claude-Com", "match": "DOMAIN-SUFFIX,claude.com", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Claude-Site", "match": "DOMAIN-SUFFIX,claude.site", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Claude-Content", "match": "DOMAIN-SUFFIX,claudeusercontent.com", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Anthropic", "match": "DOMAIN-SUFFIX,anthropic.com", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Claude-App", "match": "PROCESS-NAME,Claude", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "Claude-Helper", "match": "PROCESS-NAME,Claude Helper", "policy": "Claude", "platforms": ["surge"] },
+        { "id": "ChatGPT", "match": "DOMAIN-SUFFIX,chatgpt.com", "policy": "GPT", "platforms": ["surge"] },
+        { "id": "OpenAI", "match": "DOMAIN-SUFFIX,openai.com", "policy": "GPT", "platforms": ["surge"] },
+        { "id": "OpenAI-Static", "match": "DOMAIN-SUFFIX,oaistatic.com", "policy": "GPT", "platforms": ["surge"] },
+        { "id": "OpenAI-Content", "match": "DOMAIN-SUFFIX,oaiusercontent.com", "policy": "GPT", "platforms": ["surge"] },
+        { "id": "ChatGPT-LiveKit", "match": "DOMAIN-SUFFIX,chatgpt.livekit.cloud", "policy": "GPT", "platforms": ["surge"] },
         { "id": "AI-SKK", "source": "skk:non_ip/ai", "policy": "AI", "qxTag": "AI (skk)" }
       ]
     },

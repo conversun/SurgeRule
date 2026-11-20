@@ -78,6 +78,17 @@ test('checked-in generated configs are exactly the current manifest and template
   }
 });
 
+test('Surge matches Claude and GPT service rules before the shared AI ruleset', () => {
+  const config = readFileSync(new URL(files.surge, root), 'utf8');
+  const rules = config.split('[Rule]\n')[1].split('\n[Host]')[0];
+  const sharedAI = 'RULE-SET,https://ruleset.skk.moe/List/non_ip/ai.conf,AI,extended-matching';
+  before(rules, 'DOMAIN-SUFFIX,claude.ai,Claude', sharedAI);
+  before(rules, 'DOMAIN-SUFFIX,chatgpt.com,GPT', sharedAI);
+  for (const rule of rules.split('\n').filter(line => /,(Claude|GPT)$/.test(line))) {
+    before(rules, rule, sharedAI);
+  }
+});
+
 test('the read-only CLI check accepts checked-in generated configs', () => {
   const result = spawnSync('node', ['script/generate-configs.mjs', '--check'], {
     cwd: fileURLToPath(root),
