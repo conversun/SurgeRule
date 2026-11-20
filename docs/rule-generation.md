@@ -117,7 +117,8 @@ Surge/Clash 还允许 DEST-PORT、IP-CIDR、IP-CIDR6、IP-ASN、PROCESS-NAME、A
 ## 本次保留的平台差异
 
 - Surge 的广告拦截和自定义覆盖继续由模块处理，不重复插入主配置。
-- Surge 的 `Claude` 和 `GPT` 专用规则先于 skk AI 合集匹配；两个策略组默认沿用 `AI`，也可单独切换出口。
+- Surge 用 `RULE-SET` 分别引用 `private/ai.list`（Claude）和 `private/gpt.list`（GPT），均先于 skk AI 合集匹配；两个策略组默认沿用 `AI`，也可单独切换出口。
+- Claude 规则参考 [one-exit](https://github.com/wquguru/one-exit)，纳入短链、MCP 相关域名和 Anthropic IP/ASN；IP 规则不触发额外 DNS 解析，不照搬共享服务分流或住宅出口专用的 IPv6 拒绝规则。
 - Clash 的 6 条广告拦截及 IP-Reject 保持停用；原有非 CN UDP/443 拦截保持原样。
 - QX 仍用 skk global/domestic，且 global 在国内规则之前；Surge/Clash 仍用 blackmatrix7。
 - QX 未新增原本没有的 DMM、Google 专用策略或邮件端口规则。

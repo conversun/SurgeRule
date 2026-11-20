@@ -78,15 +78,32 @@ test('checked-in generated configs are exactly the current manifest and template
   }
 });
 
-test('Surge matches Claude and GPT service rules before the shared AI ruleset', () => {
+test('Surge references standalone Claude and GPT rulesets before the shared AI ruleset', () => {
   const config = readFileSync(new URL(files.surge, root), 'utf8');
   const rules = config.split('[Rule]\n')[1].split('\n[Host]')[0];
   const sharedAI = 'RULE-SET,https://ruleset.skk.moe/List/non_ip/ai.conf,AI,extended-matching';
-  before(rules, 'DOMAIN-SUFFIX,claude.ai,Claude', sharedAI);
-  before(rules, 'DOMAIN-SUFFIX,chatgpt.com,GPT', sharedAI);
-  for (const rule of rules.split('\n').filter(line => /,(Claude|GPT)$/.test(line))) {
-    before(rules, rule, sharedAI);
-  }
+  const privateBase = 'https://fast.runapp.cc/https://raw.githubusercontent.com/conversun/SurgeRule/main/private/';
+  const claude = `RULE-SET,${privateBase}ai.list,Claude,extended-matching`;
+  const gpt = `RULE-SET,${privateBase}gpt.list,GPT,extended-matching`;
+
+  before(rules, claude, gpt);
+  before(rules, gpt, sharedAI);
+  expect(rules.split('\n').filter(line => /,(Claude|GPT)(,|$)/.test(line))).toEqual([claude, gpt]);
+});
+
+test.each([
+  ['ai', [
+    'DOMAIN-SUFFIX,claude.ai',
+    'DOMAIN-SUFFIX,clau.de',
+    'DOMAIN-SUFFIX,claudemcpcontent.com',
+    'DOMAIN-SUFFIX,modelcontextprotocol.io',
+    'IP-CIDR,160.79.104.0/21,no-resolve',
+    'IP-ASN,399358,no-resolve',
+  ]],
+  ['gpt', ['DOMAIN-SUFFIX,chatgpt.com']],
+])('private/%s.list retains service matches', (name, matches) => {
+  const rules = readFileSync(new URL(`private/${name}.list`, root), 'utf8').split(/\r?\n/);
+  for (const match of matches) expect(rules).toContain(match);
 });
 
 test('the read-only CLI check accepts checked-in generated configs', () => {
